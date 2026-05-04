@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 const SYSTEM_PROMPT = `You are a seasoned, atmospheric Dungeon Master running a solo D&D 5e campaign set in Ashfen — an isolated mining town gripped by blizzards. The Top Tavern is its warm heart.
 
