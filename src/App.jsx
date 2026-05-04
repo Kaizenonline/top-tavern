@@ -1156,6 +1156,36 @@ function Portrait({ name, size=80, border="#c8982a" }) {
   );
 }
 
+
+function BestiaryEntry({ name, data }) {
+  const [expanded, setExpanded] = useState(false);
+  return (
+    <div
+      style={{background: expanded?"#160e06":"#120e08",
+        border:`1px solid ${expanded?"#4a2c10":"#2a1c0c"}`,
+        padding:"14px 16px",display:"flex",gap:"12px",alignItems:"flex-start",
+        cursor:"pointer",transition:"all .2s"}}
+      onClick={()=>setExpanded(e=>!e)}
+      title={expanded?"Click to collapse":"Click to read full description"}>
+      <Portrait name={name} size={64} height={80} border={expanded?"#8a5020":"#3a2010"}/>
+      <div style={{flex:1,minWidth:0}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"5px"}}>
+          <span style={{fontFamily:"'Cinzel',serif",color: expanded?"#e8c078":"#e8d9b5",fontSize:"15px",fontWeight:600}}>{name}</span>
+          <div style={{display:"flex",gap:"8px",alignItems:"center"}}>
+            <span style={{background:"#1a0808",border:"1px solid #3a1010",color:"#ef6060",fontFamily:"'Cinzel',serif",fontSize:"11px",letterSpacing:"2px",padding:"2px 8px"}}>×{data.count} slain</span>
+            <span style={{color:"#5a3510",fontSize:"13px"}}>{expanded?"▲":"▼"}</span>
+          </div>
+        </div>
+        <div style={{color:"#8a7050",fontSize:"13px",fontStyle:"italic",lineHeight:1.7,
+          maxHeight:expanded?"400px":"2.8em",overflow:"hidden",transition:"max-height .3s ease"}}>
+          {data.desc?.replace(/[^\w\s.,!?;:'"()\-]/g," ") || "Encountered in the dark."}
+        </div>
+        {expanded && <div style={{color:"#4a3020",fontSize:"11px",marginTop:"6px",fontFamily:"'Cinzel',serif",letterSpacing:"1px"}}>▲ COLLAPSE</div>}
+      </div>
+    </div>
+  );
+}
+
 function Section({ title, color, empty, children }) {
   if (empty) return null;
   return (
@@ -1639,6 +1669,19 @@ export default function App() {
   useEffect(() => { questsRef.current     = quests;       }, [quests]);
   useEffect(() => { bestiaryRef.current   = bestiary;     }, [bestiary]);
   useEffect(() => { npcRepRef.current     = npcRep;       }, [npcRep]);
+  // Intro animation — fire phase progression on mount / screen change
+  useEffect(() => {
+    if (screen !== "intro") return;
+    if (introPhase !== 0) return;
+    const timers = [
+      setTimeout(()=>setIntroPhase(1),  200),
+      setTimeout(()=>setIntroPhase(2), 1000),
+      setTimeout(()=>setIntroPhase(3), 1800),
+      setTimeout(()=>setIntroPhase(4), 2800),
+    ];
+    return () => timers.forEach(clearTimeout);
+  }, [screen, introPhase]);
+
   useEffect(() => {
     // Only auto-scroll if we were already at the bottom — don't yank user away
     if (atBottom) {
@@ -2274,9 +2317,9 @@ export default function App() {
     <div style={{minHeight:"100vh",position:"relative",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"40px 20px",fontFamily:"'Crimson Text',Georgia,serif",overflow:"hidden"}}>
       <style>{FONTS}</style>
 
-      {/* Full-bleed tavern exterior — The Top Pub, Rosebery Tasmania, dark fantasy, no electricity */}
-      <div style={{position:"absolute",inset:0,zIndex:0}}>
-        <svg viewBox="0 0 900 580" preserveAspectRatio="xMidYMid slice" style={{width:"100%",height:"100%",display:"block"}} xmlns="http://www.w3.org/2000/svg">
+      {/* Full-bleed tavern exterior — The Top Pub, Rosebery Tasmania */}
+      <div style={{position:"absolute",inset:0,zIndex:0}}
+        dangerouslySetInnerHTML={{__html:`<svg viewBox="0 0 900 580" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;display:block" xmlns="http://www.w3.org/2000/svg">
           <rect width="900" height="580" fill="#030408"/>
           <rect x="0" y="0" width="900" height="340" fill="#04050c"/>
           <ellipse cx="150"  cy="55"  rx="200" ry="75"  fill="#060810" opacity="0.95"/>
@@ -2532,18 +2575,10 @@ export default function App() {
           <rect x="0"   y="0"   width="900" height="60"  fill="#000000" opacity="0.65"/>
           <rect x="0"   y="540" width="900" height="40"  fill="#000000" opacity="0.75"/>
           <rect x="0"   y="0"   width="900" height="20"  fill="#060a18" opacity="0.5"/>
-        </svg>
-      </div>
+        </svg>`}}/>
 
       {/* Foreground UI — animated intro sequence */}
       {(()=>{
-        // Trigger animation phases on mount
-        if (introPhase === 0) {
-          setTimeout(()=>setIntroPhase(1), 200);
-          setTimeout(()=>setIntroPhase(2), 1000);
-          setTimeout(()=>setIntroPhase(3), 1800);
-          setTimeout(()=>setIntroPhase(4), 2800);
-        }
         const vis = (phase) => ({
           opacity: introPhase >= phase ? 1 : 0,
           transform: introPhase >= phase ? "translateY(0)" : "translateY(12px)",
@@ -2751,8 +2786,8 @@ export default function App() {
       `}</style>
 
       {/* Tavern exterior as dark muted background */}
-      <div style={{position:"absolute",inset:0,zIndex:0,filter:"brightness(0.28) saturate(0.6)"}}>
-        <svg viewBox="0 0 900 580" preserveAspectRatio="xMidYMid slice" style={{width:"100%",height:"100%"}} xmlns="http://www.w3.org/2000/svg">
+      <div style={{position:"absolute",inset:0,zIndex:0,filter:"brightness(0.28) saturate(0.6)"}}
+        dangerouslySetInnerHTML={{__html:`<svg viewBox="0 0 900 580" preserveAspectRatio="xMidYMid slice" style={{width:"100%",height:"100%"}} xmlns="http://www.w3.org/2000/svg">
           <rect width="900" height="580" fill="#030408"/>
           <rect x="0" y="0" width="900" height="340" fill="#04050c"/>
           <ellipse cx="420" cy="38" rx="260" ry="80" fill="#050710" opacity="0.95"/>
@@ -2773,15 +2808,14 @@ export default function App() {
           <ellipse cx="463" cy="393" rx="6" ry="7" fill="#d06010" opacity="0.75"/>
           <ellipse cx="463" cy="390" rx="4" ry="6" fill="#e88018" opacity="0.7"/>
           <ellipse cx="463" cy="400" rx="45" ry="40" fill="#c87808" opacity="0.22"/>
-          <circle cx="450" cy="508" r="74" fill="none" stroke="#6b0f0f" strokeWidth="1.4" opacity="0.5"/>
-          <line x1="450" y1="434" x2="416" y2="563" stroke="#6b0f0f" strokeWidth="0.8" opacity="0.38"/>
-          <line x1="450" y1="434" x2="514" y2="558" stroke="#6b0f0f" strokeWidth="0.8" opacity="0.38"/>
-          <line x1="386" y1="479" x2="514" y2="479" stroke="#6b0f0f" strokeWidth="0.8" opacity="0.38"/>
-          <line x1="386" y1="479" x2="485" y2="560" stroke="#6b0f0f" strokeWidth="0.8" opacity="0.38"/>
-          <line x1="514" y1="479" x2="415" y2="560" stroke="#6b0f0f" strokeWidth="0.8" opacity="0.38"/>
+          <circle cx="450" cy="508" r="74" fill="none" stroke="#6b0f0f" stroke-width="1.4" opacity="0.5"/>
+          <line x1="450" y1="434" x2="416" y2="563" stroke="#6b0f0f" stroke-width="0.8" opacity="0.38"/>
+          <line x1="450" y1="434" x2="514" y2="558" stroke="#6b0f0f" stroke-width="0.8" opacity="0.38"/>
+          <line x1="386" y1="479" x2="514" y2="479" stroke="#6b0f0f" stroke-width="0.8" opacity="0.38"/>
+          <line x1="386" y1="479" x2="485" y2="560" stroke="#6b0f0f" stroke-width="0.8" opacity="0.38"/>
+          <line x1="514" y1="479" x2="415" y2="560" stroke="#6b0f0f" stroke-width="0.8" opacity="0.38"/>
           <rect x="0" y="0" width="900" height="580" fill="#000000" opacity="0.35"/>
-        </svg>
-      </div>
+        </svg>`}}/>
 
       {/* Content */}
       <div style={{position:"relative",zIndex:1,minHeight:"100vh",padding:"28px 20px",maxWidth:760,margin:"0 auto"}}>
@@ -3714,35 +3748,9 @@ export default function App() {
               </div>
             ) : (
               <div style={{display:"flex",flexDirection:"column",gap:"10px"}}>
-                {Object.entries(bestiary).map(([name,data])=>{
-                  const [expanded,setExpanded] = React.useState(false);
-                  return (
-                    <div key={name}
-                      style={{background: expanded?"#160e06":"#120e08",
-                        border:`1px solid ${expanded?"#4a2c10":"#2a1c0c"}`,
-                        padding:"14px 16px",display:"flex",gap:"12px",alignItems:"flex-start",
-                        cursor:"pointer",transition:"all .2s"}}
-                      onClick={()=>setExpanded(e=>!e)}
-                      title={expanded?"Click to collapse":"Click to read full description"}>
-                      <Portrait name={name} size={64} height={80} border={expanded?"#8a5020":"#3a2010"}/>
-                      <div style={{flex:1,minWidth:0}}>
-                        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"5px"}}>
-                          <span style={{fontFamily:"'Cinzel',serif",color: expanded?"#e8c078":"#e8d9b5",fontSize:"15px",fontWeight:600}}>{name}</span>
-                          <div style={{display:"flex",gap:"8px",alignItems:"center"}}>
-                            <span style={{background:"#1a0808",border:"1px solid #3a1010",color:"#ef6060",fontFamily:"'Cinzel',serif",fontSize:"11px",letterSpacing:"2px",padding:"2px 8px"}}>×{data.count} slain</span>
-                            <span style={{color:"#5a3510",fontSize:"13px"}}>{expanded?"▲":"▼"}</span>
-                          </div>
-                        </div>
-                        <div style={{color:"#8a7050",fontSize:"13px",fontStyle:"italic",lineHeight:1.7,
-                          maxHeight: expanded?"400px":"2.8em",overflow:"hidden",
-                          transition:"max-height .3s ease"}}>
-                          {data.desc?.replace(/[^\w\s.,!?;:'"()\-]/g," ") || "Encountered in the dark."}
-                        </div>
-                        {expanded && <div style={{color:"#4a3020",fontSize:"11px",marginTop:"6px",fontFamily:"'Cinzel',serif",letterSpacing:"1px"}}>▲ COLLAPSE</div>}
-                      </div>
-                    </div>
-                  );
-                })}
+                {Object.entries(bestiary).map(([name,data])=>(
+                  <BestiaryEntry key={name} name={name} data={data}/>
+                ))}
               </div>
             )}
             <button onClick={()=>setShowBestiary(false)} style={{display:"block",margin:"16px auto 0",background:"transparent",border:"1px solid #5a3510",color:"#7a5828",fontFamily:"'Cinzel',serif",fontSize:"12px",padding:"8px 24px",cursor:"pointer",letterSpacing:"2px"}}>
@@ -4374,11 +4382,8 @@ export default function App() {
                 <text x="60" y="88" fill="#c8982a" fontSize="9" textAnchor="middle" fontFamily="Cinzel,serif" letterSpacing="1">TOP</text>
                 <text x="60" y="100" fill="#c8982a" fontSize="9" textAnchor="middle" fontFamily="Cinzel,serif" letterSpacing="1">TAVERN</text>
                 <text x="60" y="112" fill="#c8982a" fontSize="14" textAnchor="middle">🍺</text>
-                {/* YOU marker — pulsing */}
-                <circle cx="60" cy="150" r="12" fill="#ef4444" opacity="0.15">
-                  <animate attributeName="r" values="8;14;8" dur="2s" repeatCount="indefinite"/>
-                  <animate attributeName="opacity" values="0.2;0;0.2" dur="2s" repeatCount="indefinite"/>
-                </circle>
+                {/* YOU marker — pulsing via CSS */}
+                <circle cx="60" cy="150" r="12" fill="#ef4444" style={{animation:"pulse 2s infinite",transformOrigin:"60px 150px"}} opacity="0.2"/>
                 <circle cx="60" cy="150" r="7" fill="#ef4444" opacity="0.9"/>
                 <text x="60" y="154" fill="white" fontSize="8" textAnchor="middle" fontFamily="Cinzel,serif">YOU</text>
                 {/* BLACKSMITH */}
@@ -4453,9 +4458,8 @@ export default function App() {
                             fill={isCurrent?"#c8982a":"#7a5828"} fontSize="10"
                             fontFamily="Cinzel,Georgia,serif">{room.label}</text>
                           {isCurrent && (
-                            <circle cx={room.x+110} cy={room.y+10} r="5" fill="#ef4444" opacity="0.9">
-                              <animate attributeName="opacity" values="0.9;0.3;0.9" dur="1.5s" repeatCount="indefinite"/>
-                            </circle>
+                            <circle cx={room.x+110} cy={room.y+10} r="5" fill="#ef4444"
+                              style={{animation:"pulse 1.5s infinite",transformOrigin:`${room.x+110}px ${room.y+10}px`}}/>
                           )}
                         </g>
                       );
