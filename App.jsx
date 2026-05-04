@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 const SYSTEM_PROMPT = `You are a seasoned, atmospheric Dungeon Master running a solo D&D 5e campaign set in Ashfen — an isolated mining town gripped by blizzards. The Top Tavern is its warm heart.
 
@@ -1103,38 +1103,6 @@ function Portrait({ name, size=160, height=200, border="#c8982a" }) {
       dangerouslySetInnerHTML={{__html: svg}}/>
   );
 }
-  // Player classes
-  Fighter: (w=80,h=80) => `<svg viewBox="0 0 80 80" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="80" fill="#14100a"/><rect x="0" y="0" width="80" height="80" fill="none" stroke="#c8982a" stroke-width="1.5"/><ellipse cx="40" cy="26" rx="13" ry="14" fill="#c8a070"/><rect x="27" y="38" width="26" height="28" rx="3" fill="#5a6a8a"/><rect x="27" y="38" width="26" height="6" fill="#4a5a7a"/><rect x="20" y="38" width="9" height="22" rx="2" fill="#5a6a8a"/><rect x="51" y="38" width="9" height="22" rx="2" fill="#5a6a8a"/><rect x="34" y="18" width="12" height="5" rx="1" fill="#8a9ab0"/><rect x="36" y="10" width="8" height="12" rx="1" fill="#8a9ab0"/><ellipse cx="35" cy="28" rx="2" ry="2.5" fill="#7a5030"/><ellipse cx="45" cy="28" rx="2" ry="2.5" fill="#7a5030"/><path d="M35 33 Q40 37 45 33" stroke="#8a5030" stroke-width="1.2" fill="none"/><rect x="38" y="62" width="4" height="14" fill="#c8982a"/><rect x="36" y="72" width="8" height="2" fill="#a87020"/></svg>`,
-
-  Rogue: (w=80,h=80) => `<svg viewBox="0 0 80 80" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="80" fill="#14100a"/><rect x="0" y="0" width="80" height="80" fill="none" stroke="#c8982a" stroke-width="1.5"/><ellipse cx="40" cy="26" rx="12" ry="13" fill="#b89060"/><rect x="28" y="37" width="24" height="30" rx="2" fill="#2a2a3a"/><rect x="20" y="37" width="10" height="20" rx="2" fill="#2a2a3a"/><rect x="50" y="37" width="10" height="20" rx="2" fill="#2a2a3a"/><rect x="28" y="15" width="24" height="10" rx="5" fill="#1a1a2a"/><rect x="28" y="17" width="24" height="7" rx="4" fill="#2a2a3a"/><ellipse cx="35" cy="27" rx="2" ry="2" fill="#5a4020"/><ellipse cx="45" cy="27" rx="2" ry="2" fill="#5a4020"/><path d="M36 32 Q40 35 44 32" stroke="#7a4030" stroke-width="1" fill="none"/><rect x="52" y="50" width="2" height="20" rx="1" fill="#c0c0c0"/><polygon points="53,50 51,44 55,44" fill="#d0d0d0"/></svg>`,
-
-  Wizard: (w=80,h=80) => `<svg viewBox="0 0 80 80" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="80" fill="#14100a"/><rect x="0" y="0" width="80" height="80" fill="none" stroke="#c8982a" stroke-width="1.5"/><ellipse cx="40" cy="28" rx="11" ry="12" fill="#d0b888"/><rect x="29" y="38" width="22" height="30" rx="2" fill="#3a2a6a"/><rect x="20" y="38" width="11" height="18" rx="2" fill="#3a2a6a"/><rect x="49" y="38" width="11" height="18" rx="2" fill="#3a2a6a"/><polygon points="40,4 26,22 54,22" fill="#2a2060"/><ellipse cx="40" cy="22" rx="14" ry="3" fill="#1a1850"/><ellipse cx="35" cy="29" rx="2" ry="2.5" fill="#4a3020"/><ellipse cx="45" cy="29" rx="2" ry="2.5" fill="#4a3020"/><path d="M36 34 Q40 37 44 34" stroke="#6a4030" stroke-width="1" fill="none"/><circle cx="56" cy="36" r="5" fill="#1a1830" stroke="#8060d0" stroke-width="1.5"/><circle cx="56" cy="36" r="2" fill="#c0a0f0" opacity="0.8"/></svg>`,
-
-  Cleric: (w=80,h=80) => `<svg viewBox="0 0 80 80" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="80" fill="#14100a"/><rect x="0" y="0" width="80" height="80" fill="none" stroke="#c8982a" stroke-width="1.5"/><ellipse cx="40" cy="27" rx="12" ry="13" fill="#c8a878"/><rect x="28" y="38" width="24" height="30" rx="2" fill="#e8e0c0"/><rect x="20" y="38" width="10" height="20" rx="2" fill="#e8e0c0"/><rect x="50" y="38" width="10" height="20" rx="2" fill="#e8e0c0"/><rect x="37" y="38" width="6" height="20" fill="#c8a030"/><rect x="28" y="46" width="24" height="6" fill="#c8a030"/><rect x="28" y="15" width="24" height="14" rx="12" fill="#d0c890"/><ellipse cx="35" cy="28" rx="2" ry="2.5" fill="#6a4020"/><ellipse cx="45" cy="28" rx="2" ry="2.5" fill="#6a4020"/><path d="M36 33 Q40 36 44 33" stroke="#8a5030" stroke-width="1.2" fill="none"/><rect x="37" y="6" width="6" height="14" rx="1" fill="#f0d860"/><rect x="33" y="10" width="14" height="4" rx="1" fill="#f0d860"/></svg>`,
-
-  // NPCs
-  Gorn: (w=80,h=80) => `<svg viewBox="0 0 80 80" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="80" fill="#14100a"/><rect x="0" y="0" width="80" height="80" fill="none" stroke="#c8982a" stroke-width="1.5"/><ellipse cx="40" cy="30" rx="14" ry="13" fill="#a87848"/><rect x="26" y="41" width="28" height="28" rx="2" fill="#5a4030"/><rect x="18" y="41" width="10" height="20" rx="2" fill="#5a4030"/><rect x="52" y="41" width="10" height="20" rx="2" fill="#5a4030"/><ellipse cx="40" cy="30" rx="14" ry="7" fill="#7a5030"/><path d="M28 32 Q40 42 52 32" stroke="#6a4020" stroke-width="3" fill="none"/><ellipse cx="34" cy="28" rx="2.5" ry="2" fill="#c8e0f0"/><ellipse cx="34" cy="28" rx="1" ry="1" fill="white" opacity="0.5"/><ellipse cx="46" cy="28" rx="2.5" ry="2" fill="#4a3020"/><path d="M31 35 Q40 40 49 35" stroke="#8a5030" stroke-width="2" fill="#6a3020"/><rect x="34" y="14" width="12" height="4" rx="1" fill="#4a3020"/><path d="M29 25 Q25 18 32 16" stroke="#6a4020" stroke-width="1.5" fill="none"/><path d="M51 25 Q55 18 48 16" stroke="#6a4020" stroke-width="1.5" fill="none"/></svg>`,
-
-  Mira: (w=80,h=80) => `<svg viewBox="0 0 80 80" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="80" fill="#14100a"/><rect x="0" y="0" width="80" height="80" fill="none" stroke="#c8982a" stroke-width="1.5"/><ellipse cx="40" cy="26" rx="13" ry="14" fill="#d4a070"/><ellipse cx="40" cy="26" rx="15" ry="10" fill="#3a2010"/><path d="M27 20 Q40 10 53 20" stroke="#3a2010" stroke-width="6" fill="none"/><rect x="26" y="38" width="28" height="30" rx="3" fill="#8a3060"/><rect x="18" y="38" width="10" height="22" rx="2" fill="#8a3060"/><rect x="52" y="38" width="10" height="22" rx="2" fill="#8a3060"/><ellipse cx="35" cy="27" rx="2.5" ry="3" fill="#5a3020"/><ellipse cx="45" cy="27" rx="2.5" ry="3" fill="#5a3020"/><path d="M35 33 Q40 38 45 33" stroke="#c06080" stroke-width="1.5" fill="#d08090"/><circle cx="28" cy="30" r="2" fill="#d0a060"/><circle cx="52" cy="30" r="2" fill="#d0a060"/><path d="M28 18 Q40 8 52 18" stroke="#5a3010" stroke-width="4" fill="none"/></svg>`,
-
-  Marta: (w=80,h=80) => `<svg viewBox="0 0 80 80" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="80" fill="#14100a"/><rect x="0" y="0" width="80" height="80" fill="none" stroke="#c8982a" stroke-width="1.5"/><ellipse cx="40" cy="30" rx="11" ry="11" fill="#b08050"/><rect x="29" y="39" width="22" height="28" rx="2" fill="#6a7a8a"/><rect x="19" y="39" width="12" height="20" rx="2" fill="#6a7a8a"/><rect x="49" y="39" width="12" height="20" rx="2" fill="#6a7a8a"/><rect x="29" y="16" width="22" height="18" rx="11" fill="#5a4030"/><ellipse cx="35" cy="30" rx="2" ry="2" fill="#4a3020"/><ellipse cx="45" cy="30" rx="2" ry="2" fill="#4a3020"/><path d="M36 35 Q40 37 44 35" stroke="#6a3020" stroke-width="1.5" fill="none"/><rect x="28" y="39" width="24" height="4" fill="#8a8090"/><path d="M21 39 L25 56 L19 56" stroke="#6a7a8a" stroke-width="1" fill="#5a6a7a"/></svg>`,
-
-  Selik: (w=80,h=80) => `<svg viewBox="0 0 80 80" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="80" fill="#14100a"/><rect x="0" y="0" width="80" height="80" fill="none" stroke="#c8982a" stroke-width="1.5"/><ellipse cx="40" cy="27" rx="12" ry="13" fill="#e8d8b0"/><rect x="28" y="38" width="24" height="30" rx="2" fill="#2a3050"/><rect x="19" y="38" width="11" height="22" rx="2" fill="#2a3050"/><rect x="50" y="38" width="11" height="22" rx="2" fill="#2a3050"/><path d="M28 22 Q40 14 52 22 L52 28 Q40 22 28 28 Z" fill="#c8c0a0"/><ellipse cx="35" cy="28" rx="2.5" ry="3" fill="#4a6080"/><ellipse cx="45" cy="28" rx="2.5" ry="3" fill="#4a6080"/><path d="M36 34 Q40 37 44 34" stroke="#8a6050" stroke-width="1" fill="none"/><circle cx="50" cy="35" r="6" fill="#10101a" stroke="#6050c0" stroke-width="1.5"/><path d="M47 35 L53 35 M50 32 L50 38" stroke="#8070e0" stroke-width="1"/></svg>`,
-
-  Prael: (w=80,h=80) => `<svg viewBox="0 0 80 80" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="80" fill="#14100a"/><rect x="0" y="0" width="80" height="80" fill="none" stroke="#c8982a" stroke-width="1.5"/><ellipse cx="40" cy="27" rx="12" ry="13" fill="#c07868"/><rect x="28" y="38" width="24" height="30" rx="2" fill="#2a1a2a"/><rect x="19" y="38" width="11" height="22" rx="2" fill="#2a1a2a"/><rect x="50" y="38" width="11" height="22" rx="2" fill="#2a1a2a"/><path d="M36 16 L40 8 L44 16" fill="#c04030"/><path d="M34 18 L40 10 L46 18" fill="#a03020"/><ellipse cx="35" cy="28" rx="2.5" ry="3" fill="#c04020"/><ellipse cx="45" cy="28" rx="2.5" ry="3" fill="#c04020"/><path d="M36 34 Q40 36 44 34" stroke="#8a3040" stroke-width="1.2" fill="none"/><rect x="51" y="46" width="2" height="22" rx="1" fill="#b0b0c0"/><polygon points="52,46 50,40 54,40" fill="#d0d0e0"/></svg>`,
-
-  // Enemies
-  Rat: (w=80,h=80) => `<svg viewBox="0 0 80 80" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="80" fill="#14100a"/><rect x="0" y="0" width="80" height="80" fill="none" stroke="#8a3020" stroke-width="1.5"/><ellipse cx="38" cy="46" rx="20" ry="14" fill="#6a5040"/><ellipse cx="26" cy="42" rx="10" ry="8" fill="#6a5040"/><ellipse cx="23" cy="38" rx="4" ry="5" fill="#7a6050"/><ellipse cx="20" cy="36" rx="2" ry="3" fill="#c06060" opacity="0.6"/><circle cx="20" cy="36" r="1.5" fill="#e04040"/><ellipse cx="28" cy="36" rx="2" ry="3" fill="#c06060" opacity="0.6"/><circle cx="28" cy="36" r="1.5" fill="#e04040"/><path d="M14 40 Q18 38 22 42" stroke="#8a6050" stroke-width="1" fill="none"/><path d="M14 42 Q18 40 20 44" stroke="#8a6050" stroke-width="1" fill="none"/><path d="M58 44 Q65 30 70 36 Q66 44 58 46" stroke="#6a5040" stroke-width="2" fill="#5a4030"/><circle cx="24" cy="39" r="1.5" fill="#200000"/><path d="M58 48 L72 60" stroke="#6a5040" stroke-width="2.5" fill="none"/></svg>`,
-
-  Skeleton: (w=80,h=80) => `<svg viewBox="0 0 80 80" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="80" fill="#14100a"/><rect x="0" y="0" width="80" height="80" fill="none" stroke="#8a3020" stroke-width="1.5"/><ellipse cx="40" cy="22" rx="12" ry="13" fill="#d0c8b0"/><ellipse cx="35" cy="21" rx="4" ry="4.5" fill="#0a0806"/><ellipse cx="45" cy="21" rx="4" ry="4.5" fill="#0a0806"/><circle cx="35" cy="21" r="2" fill="#c0a020" opacity="0.7"/><circle cx="45" cy="21" r="2" fill="#c0a020" opacity="0.7"/><path d="M35 29 L37 31 L40 28 L43 31 L45 29" stroke="#b0a890" stroke-width="1.2" fill="none"/><rect x="30" y="33" width="20" height="24" rx="2" fill="none" stroke="#c0b898" stroke-width="1.5"/><line x1="40" y1="33" x2="40" y2="57" stroke="#c0b898" stroke-width="1.5"/><line x1="30" y1="40" x2="50" y2="40" stroke="#c0b898" stroke-width="1.5"/><rect x="18" y="33" width="5" height="18" rx="2" fill="none" stroke="#c0b898" stroke-width="1.5"/><rect x="57" y="33" width="5" height="18" rx="2" fill="none" stroke="#c0b898" stroke-width="1.5"/><rect x="32" y="55" width="6" height="16" rx="2" fill="none" stroke="#c0b898" stroke-width="1.5"/><rect x="42" y="55" width="6" height="16" rx="2" fill="none" stroke="#c0b898" stroke-width="1.5"/></svg>`,
-
-  Zombie: (w=80,h=80) => `<svg viewBox="0 0 80 80" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="80" fill="#14100a"/><rect x="0" y="0" width="80" height="80" fill="none" stroke="#8a3020" stroke-width="1.5"/><ellipse cx="40" cy="25" rx="13" ry="13" fill="#7a9060"/><rect x="27" y="36" width="26" height="30" rx="2" fill="#5a7048"/><rect x="17" y="36" width="12" height="24" rx="2" fill="#5a7048" style="transform-origin:29px 36px;transform:rotate(-20deg)"/><rect x="51" y="36" width="12" height="24" rx="2" fill="#5a7048" style="transform-origin:51px 36px;transform:rotate(20deg)"/><ellipse cx="34" cy="24" rx="3" ry="3" fill="#902010"/><ellipse cx="46" cy="24" rx="3" ry="3" fill="#902010"/><path d="M33 30 Q36 28 40 31 Q44 28 47 30" stroke="#5a3020" stroke-width="1.5" fill="none"/><path d="M34 22 L38 20 M42 20 L46 22" stroke="#4a6030" stroke-width="1"/><path d="M30 18 Q35 10 40 16 Q45 10 50 18" stroke="#8a3020" stroke-width="1" fill="none"/></svg>`,
-
-  "Drowned Warden": (w=80,h=80) => `<svg viewBox="0 0 80 80" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="80" fill="#080610"/><rect x="0" y="0" width="80" height="80" fill="none" stroke="#8a3a8a" stroke-width="2"/><text x="40" y="10" text-anchor="middle" fill="#8a3a8a" font-size="8" font-family="serif" letter-spacing="2">☠ MINI BOSS</text><ellipse cx="40" cy="30" rx="15" ry="14" fill="#3a5848"/><rect x="25" y="42" width="30" height="28" rx="2" fill="#2a4840"/><rect x="14" y="42" width="13" height="26" rx="2" fill="#2a4840"/><rect x="53" y="42" width="13" height="26" rx="2" fill="#2a4840"/><ellipse cx="33" cy="28" rx="4" ry="4.5" fill="#0a1408"/><ellipse cx="47" cy="28" rx="4" ry="4.5" fill="#0a1408"/><circle cx="33" cy="28" r="2" fill="#20e080" opacity="0.8"/><circle cx="47" cy="28" r="2" fill="#20e080" opacity="0.8"/><path d="M32 36 L35 33 L40 37 L45 33 L48 36" stroke="#3a6858" stroke-width="1.5" fill="none"/><path d="M25 42 Q30 38 35 42" stroke="#1a3828" stroke-width="2" fill="none"/><path d="M45 42 Q50 38 55 42" stroke="#1a3828" stroke-width="2" fill="none"/><ellipse cx="40" cy="56" rx="18" ry="4" fill="#1a3828" opacity="0.6"/><path d="M14 54 Q16 50 18 54 Q20 58 22 54" stroke="#2a4040" stroke-width="1.5" fill="none"/><path d="M58 54 Q60 50 62 54 Q64 58 66 54" stroke="#2a4040" stroke-width="1.5" fill="none"/></svg>`,
-
-  Malgrath: (w=80,h=80) => `<svg viewBox="0 0 80 80" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="80" fill="#080408"/><rect x="0" y="0" width="80" height="80" fill="none" stroke="#c8982a" stroke-width="2"/><text x="40" y="10" text-anchor="middle" fill="#c04020" font-size="7" font-family="serif" letter-spacing="2">MALGRATH</text><ellipse cx="40" cy="28" rx="15" ry="16" fill="#1a0a0a"/><rect x="24" y="42" width="32" height="30" rx="1" fill="#1a0808"/><rect x="12" y="42" width="14" height="28" rx="1" fill="#1a0808"/><rect x="54" y="42" width="14" height="28" rx="1" fill="#1a0808"/><ellipse cx="33" cy="26" rx="4" ry="5" fill="#0a0408"/><ellipse cx="47" cy="26" rx="4" ry="5" fill="#0a0408"/><circle cx="33" cy="26" r="2.5" fill="#e03010" opacity="0.9"/><circle cx="47" cy="26" r="2.5" fill="#e03010" opacity="0.9"/><path d="M30 34 L34 30 L40 36 L46 30 L50 34" stroke="#3a1010" stroke-width="2" fill="none"/><path d="M28 15 L32 8 L36 14" fill="#3a0a0a"/><path d="M44 14 L48 8 L52 15" fill="#3a0a0a"/><path d="M40 12 L40 6" stroke="#c8982a" stroke-width="1.5"/><circle cx="40" cy="5" r="3" fill="#c8982a" opacity="0.7"/><rect x="38" y="40" width="4" height="16" fill="#c8982a" opacity="0.4"/></svg>`,
-};
-
 function getPortrait(name, w=80, h=80) {
   if (!name) return null;
   const n = name.toLowerCase();
@@ -2317,9 +2285,9 @@ export default function App() {
     <div style={{minHeight:"100vh",position:"relative",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"40px 20px",fontFamily:"'Crimson Text',Georgia,serif",overflow:"hidden"}}>
       <style>{FONTS}</style>
 
-      {/* Full-bleed tavern exterior — The Top Pub, Rosebery Tasmania, dark fantasy, no electricity */}
-      <div style={{position:"absolute",inset:0,zIndex:0}}>
-        <svg viewBox="0 0 900 580" preserveAspectRatio="xMidYMid slice" style={{width:"100%",height:"100%",display:"block"}} xmlns="http://www.w3.org/2000/svg">
+      {/* Full-bleed tavern exterior — The Top Pub, Rosebery Tasmania */}
+      <div style={{position:"absolute",inset:0,zIndex:0}}
+        dangerouslySetInnerHTML={{__html:`<svg viewBox="0 0 900 580" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;display:block" xmlns="http://www.w3.org/2000/svg">
           <rect width="900" height="580" fill="#030408"/>
           <rect x="0" y="0" width="900" height="340" fill="#04050c"/>
           <ellipse cx="150"  cy="55"  rx="200" ry="75"  fill="#060810" opacity="0.95"/>
@@ -2575,8 +2543,7 @@ export default function App() {
           <rect x="0"   y="0"   width="900" height="60"  fill="#000000" opacity="0.65"/>
           <rect x="0"   y="540" width="900" height="40"  fill="#000000" opacity="0.75"/>
           <rect x="0"   y="0"   width="900" height="20"  fill="#060a18" opacity="0.5"/>
-        </svg>
-      </div>
+        </svg>`}}/>
 
       {/* Foreground UI — animated intro sequence */}
       {(()=>{
@@ -2787,8 +2754,8 @@ export default function App() {
       `}</style>
 
       {/* Tavern exterior as dark muted background */}
-      <div style={{position:"absolute",inset:0,zIndex:0,filter:"brightness(0.28) saturate(0.6)"}}>
-        <svg viewBox="0 0 900 580" preserveAspectRatio="xMidYMid slice" style={{width:"100%",height:"100%"}} xmlns="http://www.w3.org/2000/svg">
+      <div style={{position:"absolute",inset:0,zIndex:0,filter:"brightness(0.28) saturate(0.6)"}}
+        dangerouslySetInnerHTML={{__html:`<svg viewBox="0 0 900 580" preserveAspectRatio="xMidYMid slice" style={{width:"100%",height:"100%"}} xmlns="http://www.w3.org/2000/svg">
           <rect width="900" height="580" fill="#030408"/>
           <rect x="0" y="0" width="900" height="340" fill="#04050c"/>
           <ellipse cx="420" cy="38" rx="260" ry="80" fill="#050710" opacity="0.95"/>
@@ -2809,15 +2776,14 @@ export default function App() {
           <ellipse cx="463" cy="393" rx="6" ry="7" fill="#d06010" opacity="0.75"/>
           <ellipse cx="463" cy="390" rx="4" ry="6" fill="#e88018" opacity="0.7"/>
           <ellipse cx="463" cy="400" rx="45" ry="40" fill="#c87808" opacity="0.22"/>
-          <circle cx="450" cy="508" r="74" fill="none" stroke="#6b0f0f" strokeWidth="1.4" opacity="0.5"/>
-          <line x1="450" y1="434" x2="416" y2="563" stroke="#6b0f0f" strokeWidth="0.8" opacity="0.38"/>
-          <line x1="450" y1="434" x2="514" y2="558" stroke="#6b0f0f" strokeWidth="0.8" opacity="0.38"/>
-          <line x1="386" y1="479" x2="514" y2="479" stroke="#6b0f0f" strokeWidth="0.8" opacity="0.38"/>
-          <line x1="386" y1="479" x2="485" y2="560" stroke="#6b0f0f" strokeWidth="0.8" opacity="0.38"/>
-          <line x1="514" y1="479" x2="415" y2="560" stroke="#6b0f0f" strokeWidth="0.8" opacity="0.38"/>
+          <circle cx="450" cy="508" r="74" fill="none" stroke="#6b0f0f" stroke-width="1.4" opacity="0.5"/>
+          <line x1="450" y1="434" x2="416" y2="563" stroke="#6b0f0f" stroke-width="0.8" opacity="0.38"/>
+          <line x1="450" y1="434" x2="514" y2="558" stroke="#6b0f0f" stroke-width="0.8" opacity="0.38"/>
+          <line x1="386" y1="479" x2="514" y2="479" stroke="#6b0f0f" stroke-width="0.8" opacity="0.38"/>
+          <line x1="386" y1="479" x2="485" y2="560" stroke="#6b0f0f" stroke-width="0.8" opacity="0.38"/>
+          <line x1="514" y1="479" x2="415" y2="560" stroke="#6b0f0f" stroke-width="0.8" opacity="0.38"/>
           <rect x="0" y="0" width="900" height="580" fill="#000000" opacity="0.35"/>
-        </svg>
-      </div>
+        </svg>`}}/>
 
       {/* Content */}
       <div style={{position:"relative",zIndex:1,minHeight:"100vh",padding:"28px 20px",maxWidth:760,margin:"0 auto"}}>
@@ -4384,11 +4350,8 @@ export default function App() {
                 <text x="60" y="88" fill="#c8982a" fontSize="9" textAnchor="middle" fontFamily="Cinzel,serif" letterSpacing="1">TOP</text>
                 <text x="60" y="100" fill="#c8982a" fontSize="9" textAnchor="middle" fontFamily="Cinzel,serif" letterSpacing="1">TAVERN</text>
                 <text x="60" y="112" fill="#c8982a" fontSize="14" textAnchor="middle">🍺</text>
-                {/* YOU marker — pulsing */}
-                <circle cx="60" cy="150" r="12" fill="#ef4444" opacity="0.15">
-                  <animate attributeName="r" values="8;14;8" dur="2s" repeatCount="indefinite"/>
-                  <animate attributeName="opacity" values="0.2;0;0.2" dur="2s" repeatCount="indefinite"/>
-                </circle>
+                {/* YOU marker — pulsing via CSS */}
+                <circle cx="60" cy="150" r="12" fill="#ef4444" style={{animation:"pulse 2s infinite",transformOrigin:"60px 150px"}} opacity="0.2"/>
                 <circle cx="60" cy="150" r="7" fill="#ef4444" opacity="0.9"/>
                 <text x="60" y="154" fill="white" fontSize="8" textAnchor="middle" fontFamily="Cinzel,serif">YOU</text>
                 {/* BLACKSMITH */}
@@ -4463,9 +4426,8 @@ export default function App() {
                             fill={isCurrent?"#c8982a":"#7a5828"} fontSize="10"
                             fontFamily="Cinzel,Georgia,serif">{room.label}</text>
                           {isCurrent && (
-                            <circle cx={room.x+110} cy={room.y+10} r="5" fill="#ef4444" opacity="0.9">
-                              <animate attributeName="opacity" values="0.9;0.3;0.9" dur="1.5s" repeatCount="indefinite"/>
-                            </circle>
+                            <circle cx={room.x+110} cy={room.y+10} r="5" fill="#ef4444"
+                              style={{animation:"pulse 1.5s infinite",transformOrigin:`${room.x+110}px ${room.y+10}px`}}/>
                           )}
                         </g>
                       );
