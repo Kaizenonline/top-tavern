@@ -1125,6 +1125,259 @@ function Portrait({ name, size=80, border="#c8982a" }) {
 }
 
 
+function CardGame({ stateRef, miraRef, gameState, miraWon, setMiraWon, setGameState, setLog, setShowCardGame }) {
+  const SUITS  = ["♠","♥","♦","♣"];
+  const RANKS  = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"];
+  const VALUES = {"2":2,"3":3,"4":4,"5":5,"6":6,"7":7,"8":8,"9":9,"10":10,"J":10,"Q":10,"K":10,"A":11};
+  const [phase,   setPhase]   = useState("intro");   // intro|bet|deal|reveal|result
+  const [bet,     setBet]     = useState(0);
+  const [allIn,   setAllIn]   = useState(false);
+  const [playerCards, setPC]  = useState([]);
+  const [miraCards,   setMC]  = useState([]);
+  const [miraDistracted, setMD] = useState(false);
+  const [msg,     setMsg]     = useState("");
+  const [won,     setWon]     = useState(null);
+
+  const gold = gameState?.gold ?? stateRef.current?.gold ?? 0;
+
+  const makeCard = () => ({ rank: RANKS[Math.floor(Math.random()*13)], suit: SUITS[Math.floor(Math.random()*4)] });
+  const handVal  = cards => cards.reduce((s,c) => s + VALUES[c.rank], 0);
+
+  const deal = () => {
+    if (bet <= 0) return;
+    const pc = [makeCard(), makeCard(), makeCard()];
+    // Mira is "distracted" ~60% of the time — she draws weaker
+    const distracted = Math.random() < 0.60;
+    setMD(distracted);
+    const mc = distracted
+      ? [makeCard(), ...[makeCard(),makeCard()].sort((a,b)=>VALUES[a.rank]-VALUES[b.rank]).slice(0,1), makeCard()].slice(0,3).map(c => distracted && Math.random()<0.4 ? {...c, rank:RANKS[Math.floor(Math.random()*6)]} : c)
+      : [makeCard(), makeCard(), makeCard()];
+    setPC(pc); setMC(mc); setPhase("reveal");
+    const pv = handVal(pc);
+    const mv = handVal(mc);
+    setTimeout(() => {
+      if (pv >= mv) {
+        setWon(true);
+        setMsg(pv === mv ? "A tie — Mira laughs and calls it a push." : `You win! (${pv} vs ${mv})`);
+      } else {
+        setWon(false);
+        setMsg(`Mira wins. (${mv} vs ${pv})`);
+      }
+      setPhase("result");
+    }, 1800);
+  };
+
+  const CardFace = ({card, faceDown=false, delay=0}) => (
+    <div style={{
+      width:"52px", height:"74px", background: faceDown?"#1a0a2a":"#f8f0e8",
+      border:`2px solid ${faceDown?"#5a3060":"#8a6040"}`, borderRadius:"6px",
+      display:"flex", flexDirection:"column", justifyContent:"space-between",
+      padding:"4px 5px", flexShrink:0,
+      boxShadow: faceDown?"none":"0 2px 8px #00000066",
+      animation: !faceDown ? `resultPop 0.3s ${delay}s ease-out both` : "none",
+      transition:"all .3s"}}>
+      {faceDown ? (
+        <div style={{width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center",color:"#8a5090",fontSize:"22px"}}>✦</div>
+      ) : (
+        <>
+          <div style={{fontFamily:"'Cinzel',serif",fontSize:"13px",fontWeight:700,
+            color: card.suit==="♥"||card.suit==="♦" ? "#c02020" : "#1a1a1a",lineHeight:1}}>
+            {card.rank}
+          </div>
+          <div style={{textAlign:"center",fontSize:"22px",lineHeight:1,
+            color: card.suit==="♥"||card.suit==="♦" ? "#c02020" : "#1a1a1a"}}>{card.suit}</div>
+          <div style={{fontFamily:"'Cinzel',serif",fontSize:"13px",fontWeight:700,alignSelf:"flex-end",
+            color: card.suit==="♥"||card.suit==="♦" ? "#c02020" : "#1a1a1a",lineHeight:1,transform:"rotate(180deg)"}}>
+            {card.rank}
+          </div>
+        </>
+      )}
+    </div>
+  );
+
+  return (
+    <div style={{background:"#0a0610",border:"2px solid #8a50a0",padding:"24px",maxWidth:480,width:"100%",maxHeight:"90vh",overflowY:"auto"}} onClick={e=>e.stopPropagation()}>
+      {/* Header */}
+      <div style={{textAlign:"center",marginBottom:"4px"}}>
+        <div style={{fontFamily:"'Cinzel',serif",color:"#c090d0",fontSize:"16px",letterSpacing:"4px"}}>🃏 ASHFEN DRAW</div>
+        <div style={{color:"#7a5080",fontSize:"13px",fontStyle:"italic",marginTop:"4px"}}>
+          {miraWon ? "Mira smiles warmly from behind the bar." : "A shadowed booth. A woman with dark eyes deals the cards."}
+        </div>
+      </div>
+
+      {phase === "intro" && (
+        <div style={{marginTop:"20px"}}>
+          <div style={{background:"#120810",border:"1px solid #3a1850",padding:"16px",marginBottom:"16px",fontSize:"14px",color:"#c0a0c8",lineHeight:1.8,fontStyle:"italic"}}>
+            She looks up as you approach, chin resting in one hand, a lazy smile crossing her face. The booth is warm, candlelit. She shuffles the worn deck with practised ease — or tries to; two cards tumble to the table. She laughs and picks them up.<br/><br/>
+            "Ashfen Draw. Three cards each. Highest total wins. Simple as that." She leans forward slightly. "Care to make it interesting?"
+          </div>
+          <div style={{display:"flex",gap:"10px",justifyContent:"center"}}>
+            <button onClick={()=>setPhase("bet")} style={{background:"transparent",border:"2px solid #8a50a0",color:"#c090d0",fontFamily:"'Cinzel',serif",fontSize:"13px",letterSpacing:"3px",padding:"10px 28px",cursor:"pointer"}}
+              onMouseEnter={e=>{e.target.style.background="#8a50a0";e.target.style.color="#0a0610";}}
+              onMouseLeave={e=>{e.target.style.background="transparent";e.target.style.color="#c090d0";}}>
+              SIT DOWN
+            </button>
+            <button onClick={()=>setShowCardGame(false)} style={{background:"transparent",border:"1px solid #2a1830",color:"#5a3060",fontFamily:"'Cinzel',serif",fontSize:"12px",letterSpacing:"2px",padding:"10px 20px",cursor:"pointer"}}>
+              WALK AWAY
+            </button>
+          </div>
+        </div>
+      )}
+
+      {phase === "bet" && (
+        <div style={{marginTop:"20px"}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 14px",background:"#14100a",border:"1px solid #2a1c0c",marginBottom:"16px"}}>
+            <span style={{color:"#8b6030",fontFamily:"'Cinzel',serif",fontSize:"11px",letterSpacing:"3px"}}>YOUR GOLD</span>
+            <span style={{color:"#c8982a",fontFamily:"'Cinzel',serif",fontSize:"18px",fontWeight:700}}>{gold}gp</span>
+          </div>
+          <div style={{color:"#7a5080",fontSize:"13px",fontStyle:"italic",marginBottom:"14px",textAlign:"center"}}>
+            "Name your stake. I've got all night."
+          </div>
+          {/* Bet buttons */}
+          <div style={{display:"flex",gap:"8px",flexWrap:"wrap",justifyContent:"center",marginBottom:"12px"}}>
+            {[1,2,5,10].filter(v=>v<=gold).map(v=>(
+              <button key={v} onClick={()=>{setBet(v);setAllIn(false);}}
+                style={{background: bet===v&&!allIn?"#2a1840":"transparent",border:`1px solid ${bet===v&&!allIn?"#8a50a0":"#3a1850"}`,
+                  color: bet===v&&!allIn?"#c090d0":"#6a4080",
+                  fontFamily:"'Cinzel',serif",fontSize:"12px",letterSpacing:"2px",padding:"6px 14px",cursor:"pointer"}}>
+                {v}gp
+              </button>
+            ))}
+            {gold > 0 && (
+              <button onClick={()=>{setBet(gold);setAllIn(true);}}
+                style={{background:allIn?"#2a0818":"transparent",border:`2px solid ${allIn?"#e060a0":"#5a1840"}`,
+                  color:allIn?"#e090c0":"#8a3060",
+                  fontFamily:"'Cinzel',serif",fontSize:"12px",letterSpacing:"2px",padding:"6px 14px",cursor:"pointer",
+                  animation:allIn?"pulse 1.5s infinite":"none"}}>
+                ALL IN ({gold}gp)
+              </button>
+            )}
+          </div>
+          {bet > 0 && (
+            <div style={{textAlign:"center",color:"#c090d0",fontSize:"13px",marginBottom:"14px",fontStyle:"italic"}}>
+              Staking {bet}gp{allIn?" — everything you have":""}
+            </div>
+          )}
+          <div style={{display:"flex",gap:"10px",justifyContent:"center"}}>
+            <button onClick={deal} disabled={bet<=0}
+              style={{background:"transparent",border:`2px solid ${bet>0?"#8a50a0":"#3a1850"}`,
+                color:bet>0?"#c090d0":"#3a1850",fontFamily:"'Cinzel',serif",fontSize:"13px",letterSpacing:"3px",padding:"10px 28px",cursor:bet>0?"pointer":"not-allowed"}}
+              onMouseEnter={e=>{ if(bet>0){e.target.style.background="#8a50a0";e.target.style.color="#0a0610";}}}
+              onMouseLeave={e=>{e.target.style.background="transparent";e.target.style.color=bet>0?"#c090d0":"#3a1850";}}>
+              DEAL
+            </button>
+            <button onClick={()=>setPhase("intro")} style={{background:"transparent",border:"1px solid #2a1830",color:"#5a3060",fontFamily:"'Cinzel',serif",fontSize:"12px",letterSpacing:"2px",padding:"10px 20px",cursor:"pointer"}}>
+              BACK
+            </button>
+          </div>
+        </div>
+      )}
+
+      {(phase === "reveal" || phase === "result") && (
+        <div style={{marginTop:"20px"}}>
+          {/* Mira's distraction */}
+          {miraDistracted && phase==="reveal" && (
+            <div style={{textAlign:"center",color:"#e090c0",fontSize:"13px",fontStyle:"italic",marginBottom:"12px",animation:"pulse 1s infinite"}}>
+              Mira leans forward as she deals, chin tilted, eyes holding yours a beat too long…
+            </div>
+          )}
+
+          {/* Your hand */}
+          <div style={{marginBottom:"16px"}}>
+            <div style={{fontFamily:"'Cinzel',serif",color:"#4ade80",fontSize:"11px",letterSpacing:"3px",marginBottom:"8px"}}>YOUR HAND {phase==="result"?`— ${handVal(playerCards)} pts`:""}</div>
+            <div style={{display:"flex",gap:"8px",justifyContent:"center"}}>
+              {playerCards.map((c,i)=><CardFace key={i} card={c} delay={i*0.15}/>)}
+            </div>
+          </div>
+
+          {/* Mira's hand */}
+          <div style={{marginBottom:"20px"}}>
+            <div style={{fontFamily:"'Cinzel',serif",color:"#c090d0",fontSize:"11px",letterSpacing:"3px",marginBottom:"8px"}}>
+              MIRA'S HAND {phase==="result"?`— ${handVal(miraCards)} pts`:"— face down"}
+            </div>
+            <div style={{display:"flex",gap:"8px",justifyContent:"center"}}>
+              {miraCards.map((c,i)=>(
+                <CardFace key={i} card={c} faceDown={phase!=="result"} delay={i*0.15+0.5}/>
+              ))}
+            </div>
+          </div>
+
+          {/* Revealing spinner */}
+          {phase === "reveal" && (
+            <div style={{textAlign:"center",color:"#7a5080",fontSize:"13px",fontStyle:"italic"}}>
+              She flips her cards…
+            </div>
+          )}
+
+          {/* Result */}
+          {phase === "result" && (
+            <div style={{textAlign:"center"}}>
+              <div style={{
+                fontFamily:"'Cinzel',serif",
+                color: won?"#4ade80":"#ef4444",
+                fontSize:"20px",fontWeight:700,letterSpacing:"4px",
+                marginBottom:"8px",
+                animation:"resultPop 0.4s ease-out"}}>
+                {won ? "YOU WIN" : "MIRA WINS"}
+              </div>
+              <div style={{color:"#9a7090",fontSize:"13px",fontStyle:"italic",marginBottom:"16px"}}>{msg}</div>
+
+              {/* All-in win — Mira stays */}
+              {won && allIn && !miraWon && (
+                <div style={{background:"#120810",border:"2px solid #c090d0",padding:"16px",marginBottom:"16px",textAlign:"left",fontSize:"14px",color:"#c0a0c8",lineHeight:1.9,fontStyle:"italic"}}>
+                  She stares at the cards for a long moment, then laughs — a real laugh, warm and surprised. She slides the pile of coins back toward you.<br/><br/>
+                  "Well. That's the first time." She looks at you with something new in her eyes. "I've got nowhere to be, and I like the look of you. This tavern needs someone who can pour a decent drink." A pause. "Unless you'd rather I left."
+                </div>
+              )}
+
+              <div style={{display:"flex",gap:"10px",justifyContent:"center",flexWrap:"wrap"}}>
+                {won && allIn && !miraWon && (
+                  <button onClick={()=>{
+                    if (miraWon) return;
+                    setMiraWon(true); miraRef.current=true;
+                    setGameState(prev=>({...prev, gold:(prev?.gold||0)+bet}));
+                    setLog(prev=>[...prev,{type:"quip",text:"Mira settles behind the bar like she's always been there. She slides you a look and a full tankard. Welcome home.",speaker:"Mira",id:Date.now()}]);
+                    setShowCardGame(false);
+                  }}
+                    style={{background:"transparent",border:"2px solid #c090d0",color:"#c090d0",fontFamily:"'Cinzel',serif",fontSize:"12px",letterSpacing:"3px",padding:"10px 24px",cursor:"pointer"}}
+                    onMouseEnter={e=>{e.target.style.background="#c090d0";e.target.style.color="#0a0610";}}
+                    onMouseLeave={e=>{e.target.style.background="transparent";e.target.style.color="#c090d0";}}>
+                    ASK HER TO STAY
+                  </button>
+                )}
+                {won && (
+                  <button onClick={()=>{
+                    setGameState(prev=>({...prev, gold:Math.max(0,(prev?.gold||0)+bet)}));
+                    setLog(prev=>[...prev,{type:"player",text:`Won ${bet}gp from Mira at Ashfen Draw.`,id:Date.now()}]);
+                    setBet(0); setAllIn(false); setWon(null); setPhase("bet");
+                  }}
+                    style={{background:"transparent",border:"1px solid #4a8040",color:"#6ab060",fontFamily:"'Cinzel',serif",fontSize:"12px",letterSpacing:"2px",padding:"10px 20px",cursor:"pointer"}}>
+                    PLAY AGAIN (+{bet}gp)
+                  </button>
+                )}
+                {!won && (
+                  <button onClick={()=>{
+                    setGameState(prev=>({...prev, gold:Math.max(0,(prev?.gold||0)-bet)}));
+                    setLog(prev=>[...prev,{type:"player",text:`Lost ${bet}gp to Mira at Ashfen Draw.`,id:Date.now()}]);
+                    setBet(0); setAllIn(false); setWon(null); setPhase("bet");
+                  }}
+                    style={{background:"transparent",border:"1px solid #5a1a1a",color:"#8a4040",fontFamily:"'Cinzel',serif",fontSize:"12px",letterSpacing:"2px",padding:"10px 20px",cursor:"pointer"}}>
+                    TRY AGAIN (-{bet}gp)
+                  </button>
+                )}
+                <button onClick={()=>setShowCardGame(false)}
+                  style={{background:"transparent",border:"1px solid #2a1830",color:"#5a3060",fontFamily:"'Cinzel',serif",fontSize:"12px",letterSpacing:"2px",padding:"10px 16px",cursor:"pointer"}}>
+                  LEAVE TABLE
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function BestiaryEntry({ name, data }) {
   const [expanded, setExpanded] = useState(false);
   return (
@@ -1637,7 +1890,6 @@ export default function App() {
   useEffect(() => { questsRef.current     = quests;       }, [quests]);
   useEffect(() => { bestiaryRef.current   = bestiary;     }, [bestiary]);
   useEffect(() => { npcRepRef.current     = npcRep;       }, [npcRep]);
-  // Intro animation — fire phase progression on mount / screen change
   useEffect(() => {
     if (screen !== "intro") return;
     if (introPhase !== 0) return;
@@ -1719,6 +1971,8 @@ export default function App() {
         quests: questsRef.current,
         bestiary: bestiaryRef.current,
         npcRep: npcRepRef.current,
+        blizzard: blizzard,
+        weather: weather,
         savedAt: Date.now()
       }));
       setSaveStatus("SAVED");
@@ -1731,8 +1985,25 @@ export default function App() {
     if (slot !== null) {
       try { await window.storage.delete(`dnd-save-${slot}`); } catch(e) {}
     }
+    // Reset ALL game state so nothing bleeds into the next run
     setGameState(null); setMessages([]); setLog([]); setActions([]);
-    setCombat(null); setLocation("The Top Tavern"); setActiveSlot(null); setScreen("intro");
+    setCombat(null); setLocation("The Top Tavern"); setActiveSlot(null);
+    setDecisions([]); decisionsRef.current = [];
+    setTurnCount(0);  turnCountRef.current = 0;
+    setEnemiesKilled(0); enemiesRef.current = 0;
+    setBestiary({}); bestiaryRef.current = {};
+    setNpcRep({ gorn:0, valdris:0, mira:0, holvik:0 }); npcRepRef.current = { gorn:0, valdris:0, mira:0, holvik:0 };
+    setQuests([]); questsRef.current = [];
+    setMiraWon(false); miraRef.current = false;
+    setParty([]); partyRef.current = [];
+    setBlizzard(false);
+    setJournal({ objectives:[], npcs:[], clues:[], items:[] });
+    setDungeonMap({ rooms:{}, currentRoom:null });
+    setWeather(null);
+    setCharBackstory(null);
+    setIntroPhase(0);
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+    setScreen("intro");
     // Refresh slot summaries
     const loaded = await Promise.all([0,1,2].map(async (i) => {
       try {
@@ -1800,16 +2071,19 @@ export default function App() {
       const res  = await fetch("/api/chat", {
         method:"POST",
         headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1000, system:SYSTEM_PROMPT, messages:msgs })
+        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1500, system:SYSTEM_PROMPT, messages:msgs })
       });
       const data = await res.json();
       const raw  = (data.content||[]).map(b => b.text||"").join("");
       let p;
       try { p = JSON.parse(raw.replace(/```(?:json)?\n?|```/g,"").trim()); }
       catch {
+        // Preserve combat state on parse failure — don't end combat mid-fight
+        const prevCb = combatRef.current;
         p = { narrative: raw||"The dungeon master pauses...", actions:["Look around","Speak to someone","Check inventory","Wait"],
               inventoryAdd:[], inventoryRemove:[], hpChange:0, goldChange:0,
-              combatActive:false, enemy:null, enemyHP:null, enemyMaxHP:null, showMap:false, xpGain:0, location:"The Top Tavern" };
+              combatActive: !!prevCb, enemy: prevCb?.enemy||null, enemyHP: prevCb?.hp||null, enemyMaxHP: prevCb?.maxHp||null,
+              showMap:false, xpGain:0, location: location };
       }
       // Compute new state synchronously so we can save it all at once
       const prev = stateRef.current;
@@ -1823,7 +2097,7 @@ export default function App() {
       const thresh = [300,900,2700,6500,14000];
       if (level < 6 && xp >= thresh[level-1]) { level++; maxHp += 5; hp = Math.min(maxHp, hp+5); }
       const newState  = { ...prev, hp, gold, xp, level, maxHp, inventory:inv, rations: prev?.rations??0, abilities: prev?.abilities??defaultAbilities(prev?.class||"Fighter"), day: prev?.day||1 };
-      const newCombat = p.combatActive ? { enemy:p.enemy, hp:p.enemyHP, maxHp:p.enemyMaxHP, miniBoss: p.enemy?.toLowerCase().includes("warden") || p.enemy?.toLowerCase().includes("boss") } : null;
+      const newCombat = p.combatActive ? { enemy:p.enemy||"Enemy", hp:Math.max(1, p.enemyHP||10), maxHp:Math.max(1, p.enemyMaxHP||10), miniBoss: p.enemy?.toLowerCase().includes("warden") || p.enemy?.toLowerCase().includes("boss") } : null;
       const newLoc    = p.location || location;
 
       // ── SFX ───────────────────────────────────────────────────────────────
@@ -1836,13 +2110,16 @@ export default function App() {
       // ── Track turns and enemy kills ────────────────────────────────────────
       setTurnCount(t => t + 1);
       if (!p.combatActive && combatRef.current) {
-        setEnemiesKilled(e => e + 1);
+        // Only count as kill if the narrative suggests defeat, not flee
+        const narrativeLower = (p.narrative||'').toLowerCase();
+        const isKill = narrativeLower.includes('dead') || narrativeLower.includes('slay') || narrativeLower.includes('slain') || narrativeLower.includes('kill') || narrativeLower.includes('defeat') || narrativeLower.includes('falls') || narrativeLower.includes('collapses') || narrativeLower.includes('body');
+        if (isKill) setEnemiesKilled(e => e + 1);
         // Add to bestiary
         const enemyName = combatRef.current.enemy;
         if (enemyName) {
           setBestiary(prev => {
             const existing = prev[enemyName] || { count:0, desc:"" };
-            return { ...prev, [enemyName]: { count: existing.count+1, desc: existing.desc || p.narrative?.substring(0,120) || "" } };
+            return { ...prev, [enemyName]: { count: existing.count+1, desc: existing.desc || (p.narrative ? p.narrative.substring(0, p.narrative.lastIndexOf(" ", 200) || 200) : "") } };
           });
         }
       }
@@ -1859,7 +2136,7 @@ export default function App() {
         if (narr.includes("gorn") && (narr.includes("thank") || narr.includes("nod") || narr.includes("smile"))) r.gorn = Math.min(3, r.gorn+1);
         if (narr.includes("valdris") && p.questUpdate?.status==="completed") r.valdris = Math.min(3, r.valdris+1);
         if (narr.includes("holvik") && (narr.includes("grateful") || narr.includes("reward"))) r.holvik = Math.min(3, r.holvik+1);
-        if (miraRef.current) r.mira = Math.min(3, r.mira+1);
+        if (miraRef.current && (narr.includes('mira') && (narr.includes('smile') || narr.includes('laugh') || narr.includes('wink') || narr.includes('nod')))) r.mira = Math.min(3, r.mira+1);
         return r;
       });
 
@@ -2014,17 +2291,20 @@ export default function App() {
       setLog(prev => [...prev, { type:"error", text:"The connection to the dungeon master flickers in the dark...", id:Date.now() }]);
     }
     setLoading(false);
-  }, [speakWithActions, location]);
+  }, [speakWithActions, location, blizzard, weather]);
 
   const doAction = useCallback((action) => {
     if (loading) return;
     // Save undo snapshot before committing
     undoSnapshot.current = {
-      gameState: stateRef.current,
-      messages:  msgsRef.current,
-      log:       log,
-      actions:   actions,
-      combat:    combatRef.current,
+      gameState:  stateRef.current,
+      messages:   msgsRef.current,
+      log:        log,
+      actions:    actions,
+      combat:     combatRef.current,
+      party:      partyRef.current,
+      journal:    journalRef.current,
+      dungeonMap: dungeonMapRef.current,
     };
     setLog(prev => [...prev, { type:"player", text:action, id:Date.now() }]);
     callDM(action);
@@ -2045,6 +2325,9 @@ export default function App() {
     setLog(snap.log);
     setActions(snap.actions);
     setCombat(snap.combat);
+    if (snap.party     !== undefined) { setParty(snap.party);           partyRef.current      = snap.party; }
+    if (snap.journal   !== undefined) { setJournal(snap.journal);       journalRef.current    = snap.journal; }
+    if (snap.dungeonMap !== undefined){ setDungeonMap(snap.dungeonMap); dungeonMapRef.current = snap.dungeonMap; }
     undoSnapshot.current = null;
   }, [loading]);
 
@@ -2167,12 +2450,16 @@ export default function App() {
     bestiaryRef.current = data.bestiary || {};
     setNpcRep(data.npcRep || { gorn:0, valdris:0, mira:0, holvik:0 });
     npcRepRef.current = data.npcRep || { gorn:0, valdris:0, mira:0, holvik:0 };
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+    setBlizzard(data.blizzard || false);
+    setWeather(data.weather || null);
+    gameStartTime.current = Date.now(); // reset play timer on load
     setScreen("game");
   }, []);
 
   const shortRest = useCallback(() => {
     const s = stateRef.current;
-    if (!s || combat) return;
+    if (!s || combatRef.current) return;
     if ((s.rations||0) < 1) { showToast("No rations left — buy some from Gorn."); return; }
     const roll   = Math.floor(Math.random() * HIT_DIE[s.class||"Fighter"]) + 1;
     const healed = Math.min(s.maxHp - s.hp, roll);
@@ -2187,7 +2474,7 @@ export default function App() {
     if (!s) return;
     if (location !== "The Top Tavern") { showToast("Long rest only available at The Top Tavern."); return; }
     if ((s.rations||0) < 2) { showToast("Long rest needs 2 rations."); return; }
-    const wages   = partyRef.current.reduce((sum, m) => sum + (HIRELINGS[m.id]?.cost||0), 0);
+    const wages   = partyRef.current.filter(m=>!m.dead).reduce((sum, m) => sum + (HIRELINGS[m.id]?.cost||0), 0);
     const newRat  = (s.rations||0) - 2;
     const newGold = Math.max(0, (s.gold||0) - wages);
     const freshAbs = defaultAbilities(s.class);
@@ -2220,12 +2507,12 @@ export default function App() {
   }, [doAction]);
 
   const fastTravel = useCallback(() => {
-    if (combat) return;
+    if (combat || loading) return;
     doAction("The party carefully retraces their steps, heading back up through the tunnels to The Top Tavern.");
-  }, [combat, doAction]);
+  }, [combat, loading, doAction]);
 
-  const hpColor  = (hp,max) => hp/max > 0.6 ? "#4ade80" : hp/max > 0.3 ? "#facc15" : "#ef4444";
-  const hpPct    = (hp,max) => Math.round((hp/max)*100);
+  const hpColor  = (hp,max) => !max||!hp ? "#4a4a4a" : hp/max > 0.6 ? "#4ade80" : hp/max > 0.3 ? "#facc15" : "#ef4444";
+  const hpPct    = (hp,max) => !max ? 0 : Math.round((Math.max(0,hp)/max)*100);
 
   // ── Tavern Map SVG ──────────────────────────────────────────────────────────
   const TavernMap = () => (
@@ -2285,9 +2572,9 @@ export default function App() {
     <div style={{minHeight:"100vh",position:"relative",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"40px 20px",fontFamily:"'Crimson Text',Georgia,serif",overflow:"hidden"}}>
       <style>{FONTS}</style>
 
-      {/* Full-bleed tavern exterior — The Top Pub, Rosebery Tasmania */}
-      <div style={{position:"absolute",inset:0,zIndex:0}}
-        dangerouslySetInnerHTML={{__html:`<svg viewBox="0 0 900 580" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;display:block" xmlns="http://www.w3.org/2000/svg">
+      {/* Full-bleed tavern exterior — The Top Pub, Rosebery Tasmania, dark fantasy, no electricity */}
+      <div style={{position:"absolute",inset:0,zIndex:0}}>
+        <svg viewBox="0 0 900 580" preserveAspectRatio="xMidYMid slice" style={{width:"100%",height:"100%",display:"block"}} xmlns="http://www.w3.org/2000/svg">
           <rect width="900" height="580" fill="#030408"/>
           <rect x="0" y="0" width="900" height="340" fill="#04050c"/>
           <ellipse cx="150"  cy="55"  rx="200" ry="75"  fill="#060810" opacity="0.95"/>
@@ -2415,9 +2702,9 @@ export default function App() {
           <ellipse cx="197" cy="500" rx="5" ry="32" fill="#8b0000" opacity="0.16"/>
           <path d="M452 466 L455 480 L450 494 L453 512 L450 530" stroke="#8b1010" strokeWidth="1.1" fill="none" opacity="0.65"/>
           <ellipse cx="452" cy="494" rx="6" ry="25" fill="#8b0000" opacity="0.16"/>
-          <ellipse cx="290" cy="466" rx="35" ry="9"  fill="#8b0000" opacity="0.22"><animate attributeName="opacity" values="0.22;0.38;0.18;0.32;0.22" dur="3s" repeatCount="indefinite"/></ellipse>
+          <ellipse cx="290" cy="466" rx="35" ry="9"  fill="#8b0000" opacity="0.22" style={{animation:"pulse 3s infinite"}}/>
           <ellipse cx="290" cy="462" rx="20" ry="5"  fill="#9b1010" opacity="0.14"/>
-          <ellipse cx="582" cy="466" rx="38" ry="10" fill="#8b0000" opacity="0.24"><animate attributeName="opacity" values="0.24;0.12;0.36;0.18;0.24" dur="4s" repeatCount="indefinite"/></ellipse>
+          <ellipse cx="582" cy="466" rx="38" ry="10" fill="#8b0000" opacity="0.24" style={{animation:"pulse 4s infinite"}}/>
           <ellipse cx="582" cy="461" rx="22" ry="5"  fill="#9b1010" opacity="0.16"/>
           <ellipse cx="450" cy="466" rx="25" ry="7"  fill="#8b0000" opacity="0.16"/>
           <ellipse cx="450" cy="468" rx="260" ry="7" fill="#8b0000" opacity="0.1"/>
@@ -2471,20 +2758,20 @@ export default function App() {
           <rect x="370" y="440" width="72" height="3" fill="#e07808" opacity="0.22"/>
           <rect x="348" y="400" width="7"  height="34" rx="2" fill="#2a1808"/>
           <rect x="344" y="396" width="15" height="10" rx="2" fill="#201408"/>
-          <ellipse cx="351" cy="396" rx="8" ry="6"  fill="#b83808" opacity="0.8"><animate attributeName="opacity" values="0.8;0.5;0.85;0.6;0.8" dur="1.8s" repeatCount="indefinite"/></ellipse>
-          <ellipse cx="351" cy="393" rx="6" ry="7"  fill="#d06010" opacity="0.75"><animate attributeName="rx" values="6;5;7;5.5;6" dur="1.3s" repeatCount="indefinite"/></ellipse>
-          <ellipse cx="351" cy="390" rx="4" ry="6"  fill="#e88018" opacity="0.7"><animate attributeName="opacity" values="0.7;0.9;0.5;0.8;0.7" dur="0.9s" repeatCount="indefinite"/></ellipse>
-          <ellipse cx="351" cy="387" rx="2.5" ry="5" fill="#f8c030" opacity="0.65"><animate attributeName="ry" values="5;6;4;5.5;5" dur="1.1s" repeatCount="indefinite"/></ellipse>
+          <ellipse cx="351" cy="396" rx="8" ry="6"  fill="#b83808" opacity="0.8" style={{animation:"pulse 1.8s infinite"}}/>
+          <ellipse cx="351" cy="393" rx="6" ry="7"  fill="#d06010" opacity="0.75"/>
+          <ellipse cx="351" cy="390" rx="4" ry="6"  fill="#e88018" opacity="0.7" style={{animation:"pulse 0.9s infinite"}}/>
+          <ellipse cx="351" cy="387" rx="2.5" ry="5" fill="#f8c030" opacity="0.65" style={{animation:"pulse 1.1s infinite"}}/>
           <ellipse cx="351" cy="400" rx="45" ry="40" fill="#c87808" opacity="0.22"/>
           <ellipse cx="351" cy="420" rx="70" ry="50" fill="#c87808" opacity="0.12"/>
           <ellipse cx="351" cy="450" rx="90" ry="40" fill="#c87808" opacity="0.07"/>
           <ellipse cx="340" cy="475" rx="50" ry="18" fill="#c87808" opacity="0.12"/>
           <rect x="460" y="400" width="7"  height="34" rx="2" fill="#2a1808"/>
           <rect x="456" y="396" width="15" height="10" rx="2" fill="#201408"/>
-          <ellipse cx="463" cy="396" rx="8" ry="6"  fill="#b83808" opacity="0.8"><animate attributeName="opacity" values="0.6;0.85;0.5;0.8;0.6" dur="2.1s" repeatCount="indefinite"/></ellipse>
-          <ellipse cx="463" cy="393" rx="6" ry="7"  fill="#d06010" opacity="0.75"><animate attributeName="rx" values="5.5;7;5;6;5.5" dur="1.5s" repeatCount="indefinite"/></ellipse>
-          <ellipse cx="463" cy="390" rx="4" ry="6"  fill="#e88018" opacity="0.7"><animate attributeName="opacity" values="0.9;0.6;0.8;0.5;0.9" dur="1.0s" repeatCount="indefinite"/></ellipse>
-          <ellipse cx="463" cy="387" rx="2.5" ry="5" fill="#f8c030" opacity="0.65"><animate attributeName="ry" values="4;6;5;4.5;4" dur="1.3s" repeatCount="indefinite"/></ellipse>
+          <ellipse cx="463" cy="396" rx="8" ry="6"  fill="#b83808" opacity="0.8" style={{animation:"pulse 2.1s infinite"}}/>
+          <ellipse cx="463" cy="393" rx="6" ry="7"  fill="#d06010" opacity="0.75"/>
+          <ellipse cx="463" cy="390" rx="4" ry="6"  fill="#e88018" opacity="0.7" style={{animation:"pulse 1.0s infinite"}}/>
+          <ellipse cx="463" cy="387" rx="2.5" ry="5" fill="#f8c030" opacity="0.65" style={{animation:"pulse 1.3s infinite"}}/>
           <ellipse cx="463" cy="400" rx="45" ry="40" fill="#c87808" opacity="0.22"/>
           <ellipse cx="463" cy="420" rx="70" ry="50" fill="#c87808" opacity="0.12"/>
           <ellipse cx="463" cy="450" rx="90" ry="40" fill="#c87808" opacity="0.07"/>
@@ -2543,7 +2830,8 @@ export default function App() {
           <rect x="0"   y="0"   width="900" height="60"  fill="#000000" opacity="0.65"/>
           <rect x="0"   y="540" width="900" height="40"  fill="#000000" opacity="0.75"/>
           <rect x="0"   y="0"   width="900" height="20"  fill="#060a18" opacity="0.5"/>
-        </svg>`}}/>
+        </svg>
+      </div>
 
       {/* Foreground UI — animated intro sequence */}
       {(()=>{
@@ -2754,8 +3042,8 @@ export default function App() {
       `}</style>
 
       {/* Tavern exterior as dark muted background */}
-      <div style={{position:"absolute",inset:0,zIndex:0,filter:"brightness(0.28) saturate(0.6)"}}
-        dangerouslySetInnerHTML={{__html:`<svg viewBox="0 0 900 580" preserveAspectRatio="xMidYMid slice" style={{width:"100%",height:"100%"}} xmlns="http://www.w3.org/2000/svg">
+      <div style={{position:"absolute",inset:0,zIndex:0,filter:"brightness(0.28) saturate(0.6)"}}>
+        <svg viewBox="0 0 900 580" preserveAspectRatio="xMidYMid slice" style={{width:"100%",height:"100%"}} xmlns="http://www.w3.org/2000/svg">
           <rect width="900" height="580" fill="#030408"/>
           <rect x="0" y="0" width="900" height="340" fill="#04050c"/>
           <ellipse cx="420" cy="38" rx="260" ry="80" fill="#050710" opacity="0.95"/>
@@ -2776,14 +3064,15 @@ export default function App() {
           <ellipse cx="463" cy="393" rx="6" ry="7" fill="#d06010" opacity="0.75"/>
           <ellipse cx="463" cy="390" rx="4" ry="6" fill="#e88018" opacity="0.7"/>
           <ellipse cx="463" cy="400" rx="45" ry="40" fill="#c87808" opacity="0.22"/>
-          <circle cx="450" cy="508" r="74" fill="none" stroke="#6b0f0f" stroke-width="1.4" opacity="0.5"/>
-          <line x1="450" y1="434" x2="416" y2="563" stroke="#6b0f0f" stroke-width="0.8" opacity="0.38"/>
-          <line x1="450" y1="434" x2="514" y2="558" stroke="#6b0f0f" stroke-width="0.8" opacity="0.38"/>
-          <line x1="386" y1="479" x2="514" y2="479" stroke="#6b0f0f" stroke-width="0.8" opacity="0.38"/>
-          <line x1="386" y1="479" x2="485" y2="560" stroke="#6b0f0f" stroke-width="0.8" opacity="0.38"/>
-          <line x1="514" y1="479" x2="415" y2="560" stroke="#6b0f0f" stroke-width="0.8" opacity="0.38"/>
+          <circle cx="450" cy="508" r="74" fill="none" stroke="#6b0f0f" strokeWidth="1.4" opacity="0.5"/>
+          <line x1="450" y1="434" x2="416" y2="563" stroke="#6b0f0f" strokeWidth="0.8" opacity="0.38"/>
+          <line x1="450" y1="434" x2="514" y2="558" stroke="#6b0f0f" strokeWidth="0.8" opacity="0.38"/>
+          <line x1="386" y1="479" x2="514" y2="479" stroke="#6b0f0f" strokeWidth="0.8" opacity="0.38"/>
+          <line x1="386" y1="479" x2="485" y2="560" stroke="#6b0f0f" strokeWidth="0.8" opacity="0.38"/>
+          <line x1="514" y1="479" x2="415" y2="560" stroke="#6b0f0f" strokeWidth="0.8" opacity="0.38"/>
           <rect x="0" y="0" width="900" height="580" fill="#000000" opacity="0.35"/>
-        </svg>`}}/>
+        </svg>
+      </div>
 
       {/* Content */}
       <div style={{position:"relative",zIndex:1,minHeight:"100vh",padding:"28px 20px",maxWidth:760,margin:"0 auto"}}>
@@ -3413,18 +3702,24 @@ export default function App() {
                   <div key={i} onClick={()=>{
                     if (!isUsable) return;
                     if (isPotion) {
+                      const s = stateRef.current;
+                      if (s && s.hp >= s.maxHp) { showToast("Already at full health!"); return; }
                       const heal = Math.floor(Math.random()*4)+1 + Math.floor(Math.random()*4)+1 + 2;
+                      const itemName = item; // capture before state update
                       setGameState(prev => {
+                        const idx = (prev?.inventory||[]).findIndex(it=>it===itemName);
                         const newInv = [...(prev?.inventory||[])];
-                        newInv.splice(i,1);
+                        if (idx >= 0) newInv.splice(idx,1);
                         return { ...prev, hp: Math.min(prev.maxHp, (prev.hp||0)+heal), inventory: newInv };
                       });
                       setLog(prev=>[...prev,{type:"player",text:`Drank a Healing Potion — restored ${heal} HP.`,id:Date.now()}]);
                     }
                     if (isTorch) {
+                      const itemName = item;
                       setGameState(prev => {
+                        const idx = (prev?.inventory||[]).findIndex(it=>it===itemName);
                         const newInv = [...(prev?.inventory||[])];
-                        newInv.splice(i,1);
+                        if (idx >= 0) newInv.splice(idx,1);
                         return { ...prev, inventory: newInv };
                       });
                       setLog(prev=>[...prev,{type:"player",text:"Lit a torch. The darkness retreats.",id:Date.now()}]);
@@ -3907,265 +4202,11 @@ export default function App() {
       )}
 
       {/* ── Ashfen Draw — Mira's Card Game ─────────────────────────── */}
-      {showCardGame && (() => {
-        const CardGame = () => {
-          const SUITS  = ["♠","♥","♦","♣"];
-          const RANKS  = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"];
-          const VALUES = {"2":2,"3":3,"4":4,"5":5,"6":6,"7":7,"8":8,"9":9,"10":10,"J":10,"Q":10,"K":10,"A":11};
-          const [phase,   setPhase]   = useState("intro");   // intro|bet|deal|reveal|result
-          const [bet,     setBet]     = useState(0);
-          const [allIn,   setAllIn]   = useState(false);
-          const [playerCards, setPC]  = useState([]);
-          const [miraCards,   setMC]  = useState([]);
-          const [miraDistracted, setMD] = useState(false);
-          const [msg,     setMsg]     = useState("");
-          const [won,     setWon]     = useState(null);
-
-          const gold = stateRef.current?.gold || 0;
-
-          const makeCard = () => ({ rank: RANKS[Math.floor(Math.random()*13)], suit: SUITS[Math.floor(Math.random()*4)] });
-          const handVal  = cards => cards.reduce((s,c) => s + VALUES[c.rank], 0);
-
-          const deal = () => {
-            if (bet <= 0) return;
-            const pc = [makeCard(), makeCard(), makeCard()];
-            // Mira is "distracted" ~60% of the time — she draws weaker
-            const distracted = Math.random() < 0.60;
-            setMD(distracted);
-            const mc = distracted
-              ? [makeCard(), ...[makeCard(),makeCard()].sort((a,b)=>VALUES[a.rank]-VALUES[b.rank]).slice(0,1), makeCard()].slice(0,3).map(c => distracted && Math.random()<0.4 ? {...c, rank:RANKS[Math.floor(Math.random()*6)]} : c)
-              : [makeCard(), makeCard(), makeCard()];
-            setPC(pc); setMC(mc); setPhase("reveal");
-            const pv = handVal(pc);
-            const mv = handVal(mc);
-            setTimeout(() => {
-              if (pv >= mv) {
-                setWon(true);
-                setMsg(pv === mv ? "A tie — Mira laughs and calls it a push." : `You win! (${pv} vs ${mv})`);
-              } else {
-                setWon(false);
-                setMsg(`Mira wins. (${mv} vs ${pv})`);
-              }
-              setPhase("result");
-            }, 1800);
-          };
-
-          const CardFace = ({card, faceDown=false, delay=0}) => (
-            <div style={{
-              width:"52px", height:"74px", background: faceDown?"#1a0a2a":"#f8f0e8",
-              border:`2px solid ${faceDown?"#5a3060":"#8a6040"}`, borderRadius:"6px",
-              display:"flex", flexDirection:"column", justifyContent:"space-between",
-              padding:"4px 5px", flexShrink:0,
-              boxShadow: faceDown?"none":"0 2px 8px #00000066",
-              animation: !faceDown ? `resultPop 0.3s ${delay}s ease-out both` : "none",
-              transition:"all .3s"}}>
-              {faceDown ? (
-                <div style={{width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center",color:"#8a5090",fontSize:"22px"}}>✦</div>
-              ) : (
-                <>
-                  <div style={{fontFamily:"'Cinzel',serif",fontSize:"13px",fontWeight:700,
-                    color: card.suit==="♥"||card.suit==="♦" ? "#c02020" : "#1a1a1a",lineHeight:1}}>
-                    {card.rank}
-                  </div>
-                  <div style={{textAlign:"center",fontSize:"22px",lineHeight:1,
-                    color: card.suit==="♥"||card.suit==="♦" ? "#c02020" : "#1a1a1a"}}>{card.suit}</div>
-                  <div style={{fontFamily:"'Cinzel',serif",fontSize:"13px",fontWeight:700,alignSelf:"flex-end",
-                    color: card.suit==="♥"||card.suit==="♦" ? "#c02020" : "#1a1a1a",lineHeight:1,transform:"rotate(180deg)"}}>
-                    {card.rank}
-                  </div>
-                </>
-              )}
-            </div>
-          );
-
-          return (
-            <div style={{background:"#0a0610",border:"2px solid #8a50a0",padding:"24px",maxWidth:480,width:"100%",maxHeight:"90vh",overflowY:"auto"}} onClick={e=>e.stopPropagation()}>
-              {/* Header */}
-              <div style={{textAlign:"center",marginBottom:"4px"}}>
-                <div style={{fontFamily:"'Cinzel',serif",color:"#c090d0",fontSize:"16px",letterSpacing:"4px"}}>🃏 ASHFEN DRAW</div>
-                <div style={{color:"#7a5080",fontSize:"13px",fontStyle:"italic",marginTop:"4px"}}>
-                  {miraWon ? "Mira smiles warmly from behind the bar." : "A shadowed booth. A woman with dark eyes deals the cards."}
-                </div>
-              </div>
-
-              {phase === "intro" && (
-                <div style={{marginTop:"20px"}}>
-                  <div style={{background:"#120810",border:"1px solid #3a1850",padding:"16px",marginBottom:"16px",fontSize:"14px",color:"#c0a0c8",lineHeight:1.8,fontStyle:"italic"}}>
-                    She looks up as you approach, chin resting in one hand, a lazy smile crossing her face. The booth is warm, candlelit. She shuffles the worn deck with practised ease — or tries to; two cards tumble to the table. She laughs and picks them up.<br/><br/>
-                    "Ashfen Draw. Three cards each. Highest total wins. Simple as that." She leans forward slightly. "Care to make it interesting?"
-                  </div>
-                  <div style={{display:"flex",gap:"10px",justifyContent:"center"}}>
-                    <button onClick={()=>setPhase("bet")} style={{background:"transparent",border:"2px solid #8a50a0",color:"#c090d0",fontFamily:"'Cinzel',serif",fontSize:"13px",letterSpacing:"3px",padding:"10px 28px",cursor:"pointer"}}
-                      onMouseEnter={e=>{e.target.style.background="#8a50a0";e.target.style.color="#0a0610";}}
-                      onMouseLeave={e=>{e.target.style.background="transparent";e.target.style.color="#c090d0";}}>
-                      SIT DOWN
-                    </button>
-                    <button onClick={()=>setShowCardGame(false)} style={{background:"transparent",border:"1px solid #2a1830",color:"#5a3060",fontFamily:"'Cinzel',serif",fontSize:"12px",letterSpacing:"2px",padding:"10px 20px",cursor:"pointer"}}>
-                      WALK AWAY
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {phase === "bet" && (
-                <div style={{marginTop:"20px"}}>
-                  <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"8px 14px",background:"#14100a",border:"1px solid #2a1c0c",marginBottom:"16px"}}>
-                    <span style={{color:"#8b6030",fontFamily:"'Cinzel',serif",fontSize:"11px",letterSpacing:"3px"}}>YOUR GOLD</span>
-                    <span style={{color:"#c8982a",fontFamily:"'Cinzel',serif",fontSize:"18px",fontWeight:700}}>{gold}gp</span>
-                  </div>
-                  <div style={{color:"#7a5080",fontSize:"13px",fontStyle:"italic",marginBottom:"14px",textAlign:"center"}}>
-                    "Name your stake. I've got all night."
-                  </div>
-                  {/* Bet buttons */}
-                  <div style={{display:"flex",gap:"8px",flexWrap:"wrap",justifyContent:"center",marginBottom:"12px"}}>
-                    {[1,2,5,10].filter(v=>v<=gold).map(v=>(
-                      <button key={v} onClick={()=>{setBet(v);setAllIn(false);}}
-                        style={{background: bet===v&&!allIn?"#2a1840":"transparent",border:`1px solid ${bet===v&&!allIn?"#8a50a0":"#3a1850"}`,
-                          color: bet===v&&!allIn?"#c090d0":"#6a4080",
-                          fontFamily:"'Cinzel',serif",fontSize:"12px",letterSpacing:"2px",padding:"6px 14px",cursor:"pointer"}}>
-                        {v}gp
-                      </button>
-                    ))}
-                    {gold > 0 && (
-                      <button onClick={()=>{setBet(gold);setAllIn(true);}}
-                        style={{background:allIn?"#2a0818":"transparent",border:`2px solid ${allIn?"#e060a0":"#5a1840"}`,
-                          color:allIn?"#e090c0":"#8a3060",
-                          fontFamily:"'Cinzel',serif",fontSize:"12px",letterSpacing:"2px",padding:"6px 14px",cursor:"pointer",
-                          animation:allIn?"pulse 1.5s infinite":"none"}}>
-                        ALL IN ({gold}gp)
-                      </button>
-                    )}
-                  </div>
-                  {bet > 0 && (
-                    <div style={{textAlign:"center",color:"#c090d0",fontSize:"13px",marginBottom:"14px",fontStyle:"italic"}}>
-                      Staking {bet}gp{allIn?" — everything you have":""}
-                    </div>
-                  )}
-                  <div style={{display:"flex",gap:"10px",justifyContent:"center"}}>
-                    <button onClick={deal} disabled={bet<=0}
-                      style={{background:"transparent",border:`2px solid ${bet>0?"#8a50a0":"#3a1850"}`,
-                        color:bet>0?"#c090d0":"#3a1850",fontFamily:"'Cinzel',serif",fontSize:"13px",letterSpacing:"3px",padding:"10px 28px",cursor:bet>0?"pointer":"not-allowed"}}
-                      onMouseEnter={e=>{ if(bet>0){e.target.style.background="#8a50a0";e.target.style.color="#0a0610";}}}
-                      onMouseLeave={e=>{e.target.style.background="transparent";e.target.style.color=bet>0?"#c090d0":"#3a1850";}}>
-                      DEAL
-                    </button>
-                    <button onClick={()=>setPhase("intro")} style={{background:"transparent",border:"1px solid #2a1830",color:"#5a3060",fontFamily:"'Cinzel',serif",fontSize:"12px",letterSpacing:"2px",padding:"10px 20px",cursor:"pointer"}}>
-                      BACK
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {(phase === "reveal" || phase === "result") && (
-                <div style={{marginTop:"20px"}}>
-                  {/* Mira's distraction */}
-                  {miraDistracted && phase==="reveal" && (
-                    <div style={{textAlign:"center",color:"#e090c0",fontSize:"13px",fontStyle:"italic",marginBottom:"12px",animation:"pulse 1s infinite"}}>
-                      Mira leans forward as she deals, chin tilted, eyes holding yours a beat too long…
-                    </div>
-                  )}
-
-                  {/* Your hand */}
-                  <div style={{marginBottom:"16px"}}>
-                    <div style={{fontFamily:"'Cinzel',serif",color:"#4ade80",fontSize:"11px",letterSpacing:"3px",marginBottom:"8px"}}>YOUR HAND {phase==="result"?`— ${handVal(playerCards)} pts`:""}</div>
-                    <div style={{display:"flex",gap:"8px",justifyContent:"center"}}>
-                      {playerCards.map((c,i)=><CardFace key={i} card={c} delay={i*0.15}/>)}
-                    </div>
-                  </div>
-
-                  {/* Mira's hand */}
-                  <div style={{marginBottom:"20px"}}>
-                    <div style={{fontFamily:"'Cinzel',serif",color:"#c090d0",fontSize:"11px",letterSpacing:"3px",marginBottom:"8px"}}>
-                      MIRA'S HAND {phase==="result"?`— ${handVal(miraCards)} pts`:"— face down"}
-                    </div>
-                    <div style={{display:"flex",gap:"8px",justifyContent:"center"}}>
-                      {miraCards.map((c,i)=>(
-                        <CardFace key={i} card={c} faceDown={phase!=="result"} delay={i*0.15+0.5}/>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Revealing spinner */}
-                  {phase === "reveal" && (
-                    <div style={{textAlign:"center",color:"#7a5080",fontSize:"13px",fontStyle:"italic"}}>
-                      She flips her cards…
-                    </div>
-                  )}
-
-                  {/* Result */}
-                  {phase === "result" && (
-                    <div style={{textAlign:"center"}}>
-                      <div style={{
-                        fontFamily:"'Cinzel',serif",
-                        color: won?"#4ade80":"#ef4444",
-                        fontSize:"20px",fontWeight:700,letterSpacing:"4px",
-                        marginBottom:"8px",
-                        animation:"resultPop 0.4s ease-out"}}>
-                        {won ? "YOU WIN" : "MIRA WINS"}
-                      </div>
-                      <div style={{color:"#9a7090",fontSize:"13px",fontStyle:"italic",marginBottom:"16px"}}>{msg}</div>
-
-                      {/* All-in win — Mira stays */}
-                      {won && allIn && !miraWon && (
-                        <div style={{background:"#120810",border:"2px solid #c090d0",padding:"16px",marginBottom:"16px",textAlign:"left",fontSize:"14px",color:"#c0a0c8",lineHeight:1.9,fontStyle:"italic"}}>
-                          She stares at the cards for a long moment, then laughs — a real laugh, warm and surprised. She slides the pile of coins back toward you.<br/><br/>
-                          "Well. That's the first time." She looks at you with something new in her eyes. "I've got nowhere to be, and I like the look of you. This tavern needs someone who can pour a decent drink." A pause. "Unless you'd rather I left."
-                        </div>
-                      )}
-
-                      <div style={{display:"flex",gap:"10px",justifyContent:"center",flexWrap:"wrap"}}>
-                        {won && allIn && !miraWon && (
-                          <button onClick={()=>{
-                            setMiraWon(true); miraRef.current=true;
-                            setGameState(prev=>({...prev, gold:(prev?.gold||0)+bet}));
-                            setLog(prev=>[...prev,{type:"quip",text:"Mira settles behind the bar like she's always been there. She slides you a look and a full tankard. Welcome home.",speaker:"Mira",id:Date.now()}]);
-                            setShowCardGame(false);
-                          }}
-                            style={{background:"transparent",border:"2px solid #c090d0",color:"#c090d0",fontFamily:"'Cinzel',serif",fontSize:"12px",letterSpacing:"3px",padding:"10px 24px",cursor:"pointer"}}
-                            onMouseEnter={e=>{e.target.style.background="#c090d0";e.target.style.color="#0a0610";}}
-                            onMouseLeave={e=>{e.target.style.background="transparent";e.target.style.color="#c090d0";}}>
-                            ASK HER TO STAY
-                          </button>
-                        )}
-                        {won && (
-                          <button onClick={()=>{
-                            setGameState(prev=>({...prev, gold:Math.max(0,(prev?.gold||0)+bet)}));
-                            setLog(prev=>[...prev,{type:"player",text:`Won ${bet}gp from Mira at Ashfen Draw.`,id:Date.now()}]);
-                            setBet(0); setAllIn(false); setWon(null); setPhase("bet");
-                          }}
-                            style={{background:"transparent",border:"1px solid #4a8040",color:"#6ab060",fontFamily:"'Cinzel',serif",fontSize:"12px",letterSpacing:"2px",padding:"10px 20px",cursor:"pointer"}}>
-                            PLAY AGAIN (+{bet}gp)
-                          </button>
-                        )}
-                        {!won && (
-                          <button onClick={()=>{
-                            setGameState(prev=>({...prev, gold:Math.max(0,(prev?.gold||0)-bet)}));
-                            setLog(prev=>[...prev,{type:"player",text:`Lost ${bet}gp to Mira at Ashfen Draw.`,id:Date.now()}]);
-                            setBet(0); setAllIn(false); setWon(null); setPhase("bet");
-                          }}
-                            style={{background:"transparent",border:"1px solid #5a1a1a",color:"#8a4040",fontFamily:"'Cinzel',serif",fontSize:"12px",letterSpacing:"2px",padding:"10px 20px",cursor:"pointer"}}>
-                            TRY AGAIN (-{bet}gp)
-                          </button>
-                        )}
-                        <button onClick={()=>setShowCardGame(false)}
-                          style={{background:"transparent",border:"1px solid #2a1830",color:"#5a3060",fontFamily:"'Cinzel',serif",fontSize:"12px",letterSpacing:"2px",padding:"10px 16px",cursor:"pointer"}}>
-                          LEAVE TABLE
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          );
-        };
-
-        return (
-          <div style={{position:"fixed",inset:0,background:"#000000dd",display:"flex",alignItems:"center",justifyContent:"center",zIndex:1000,padding:"20px"}} onClick={()=>setShowCardGame(false)}>
-            <CardGame/>
-          </div>
-        );
-      })()}
+      {showCardGame && (
+        <div style={{position:"fixed",inset:0,background:"#000000dd",display:"flex",alignItems:"center",justifyContent:"center",zIndex:1000,padding:"20px"}} onClick={()=>setShowCardGame(false)}>
+          <CardGame stateRef={stateRef} miraRef={miraRef} gameState={gameState} miraWon={miraWon} setMiraWon={setMiraWon} setGameState={setGameState} setLog={setLog} setShowCardGame={setShowCardGame}/>
+        </div>
+      )}
       {showShop && (() => {
         const SHOP_ITEMS = [
           { id:"torch",    name:"Torch",            cost:1,  unit:"sp", costGold:0.1, desc:"Burns for ~1 hour. Essential underground.", inv:"Torch" },
@@ -4351,7 +4392,8 @@ export default function App() {
                 <text x="60" y="100" fill="#c8982a" fontSize="9" textAnchor="middle" fontFamily="Cinzel,serif" letterSpacing="1">TAVERN</text>
                 <text x="60" y="112" fill="#c8982a" fontSize="14" textAnchor="middle">🍺</text>
                 {/* YOU marker — pulsing via CSS */}
-                <circle cx="60" cy="150" r="12" fill="#ef4444" style={{animation:"pulse 2s infinite",transformOrigin:"60px 150px"}} opacity="0.2"/>
+                <circle cx="60" cy="150" r="12" fill="#ef4444" opacity="0.2"
+                  style={{animation:"pulse 2s infinite",transformOrigin:"60px 150px"}}/>
                 <circle cx="60" cy="150" r="7" fill="#ef4444" opacity="0.9"/>
                 <text x="60" y="154" fill="white" fontSize="8" textAnchor="middle" fontFamily="Cinzel,serif">YOU</text>
                 {/* BLACKSMITH */}
@@ -4426,8 +4468,8 @@ export default function App() {
                             fill={isCurrent?"#c8982a":"#7a5828"} fontSize="10"
                             fontFamily="Cinzel,Georgia,serif">{room.label}</text>
                           {isCurrent && (
-                            <circle cx={room.x+110} cy={room.y+10} r="5" fill="#ef4444"
-                              style={{animation:"pulse 1.5s infinite",transformOrigin:`${room.x+110}px ${room.y+10}px`}}/>
+                            <circle cx={room.x+110} cy={room.y+10} r="5" fill="#ef4444" opacity="0.9"
+                              style={{animation:"pulse 1.5s infinite"}}/>
                           )}
                         </g>
                       );
