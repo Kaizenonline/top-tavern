@@ -2547,458 +2547,110 @@ export default function App() {
   if (screen === "intro") {
     const filledSlots = slots.filter(Boolean);
     return (
-    <div style={{minHeight:"100vh",position:"relative",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"40px 20px",fontFamily:"'Crimson Text',Georgia,serif",overflow:"hidden"}}>
-      <style>{FONTS}</style>
+      <div style={{minHeight:"100vh",background:"#080706",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"40px 20px",fontFamily:"Georgia,serif",position:"relative",overflow:"hidden"}}>
+        <style>{FONTS}</style>
 
-      {/* Full-bleed tavern exterior — The Top Pub, Rosebery Tasmania, dark fantasy, no electricity */}
-      <div style={{position:"absolute",inset:0,zIndex:0}}>
-        <svg viewBox="0 0 900 580" preserveAspectRatio="xMidYMid slice" style={{width:"100%",height:"100%",display:"block"}} xmlns="http://www.w3.org/2000/svg">
-          <rect width="900" height="580" fill="#030408"/>
-          <rect x="0" y="0" width="900" height="340" fill="#04050c"/>
-          <ellipse cx="150"  cy="55"  rx="200" ry="75"  fill="#060810" opacity="0.95"/>
-          <ellipse cx="420"  cy="38"  rx="260" ry="80"  fill="#050710" opacity="0.95"/>
-          <ellipse cx="700"  cy="50"  rx="240" ry="70"  fill="#060810" opacity="0.95"/>
-          <ellipse cx="280"  cy="110" rx="200" ry="60"  fill="#07091a" opacity="0.8"/>
-          <ellipse cx="560"  cy="100" rx="280" ry="65"  fill="#060810" opacity="0.8"/>
-          <ellipse cx="760" cy="55" rx="100" ry="60" fill="#181e2a" opacity="0.18"/>
-          <ellipse cx="760" cy="55" rx="45"  ry="30" fill="#2a3545" opacity="0.10"/>
-          <polygon points="0,290 80,165 180,235 290,145 390,205 490,135 590,195 690,125 790,178 900,155 900,290" fill="#060809" opacity="1"/>
-          <polygon points="0,308 60,228 160,275 250,208 350,260 450,192 550,245 650,190 750,238 850,200 900,220 900,308" fill="#050708"/>
-          <polygon points="0,325 50,278 130,305 210,268 320,308 415,260 515,300 615,255 715,294 810,260 900,280 900,325" fill="#040606"/>
-          <polygon points="30,328  38,294 46,328"  fill="#030505"/>
-          <polygon points="50,325  60,285 70,325"  fill="#030505"/>
-          <polygon points="72,327  82,292 92,327"  fill="#030505"/>
-          <polygon points="808,328 818,294 828,328" fill="#030505"/>
-          <polygon points="830,325 840,285 850,325" fill="#030505"/>
-          <polygon points="852,327 862,292 872,327" fill="#030505"/>
-          <rect x="0" y="462" width="900" height="118" fill="#0c0a09"/>
-          <rect x="0" y="462" width="900" height="16" fill="#0b0908"/>
-          <rect x="0" y="479" width="900" height="14" fill="#0a0807"/>
-          <rect x="0" y="494" width="900" height="16" fill="#0b0908"/>
-          <rect x="0" y="511" width="900" height="14" fill="#0a0807"/>
-          <rect x="0" y="526" width="900" height="16" fill="#0b0908"/>
-          <rect x="0" y="543" width="900" height="37" fill="#0a0807"/>
-          <line x1="42"  y1="462" x2="40"  y2="580" stroke="#080706" strokeWidth="1" opacity="0.8"/>
-          <line x1="90"  y1="462" x2="88"  y2="580" stroke="#080706" strokeWidth="1" opacity="0.8"/>
-          <line x1="136" y1="462" x2="134" y2="580" stroke="#080706" strokeWidth="1" opacity="0.8"/>
-          <line x1="180" y1="462" x2="178" y2="580" stroke="#080706" strokeWidth="1" opacity="0.8"/>
-          <line x1="224" y1="462" x2="222" y2="580" stroke="#080706" strokeWidth="1" opacity="0.8"/>
-          <line x1="662" y1="462" x2="660" y2="580" stroke="#080706" strokeWidth="1" opacity="0.8"/>
-          <line x1="706" y1="462" x2="704" y2="580" stroke="#080706" strokeWidth="1" opacity="0.8"/>
-          <line x1="750" y1="462" x2="748" y2="580" stroke="#080706" strokeWidth="1" opacity="0.8"/>
-          <line x1="796" y1="462" x2="794" y2="580" stroke="#080706" strokeWidth="1" opacity="0.8"/>
-          <line x1="840" y1="462" x2="838" y2="580" stroke="#080706" strokeWidth="1" opacity="0.8"/>
-          <ellipse cx="100" cy="466" rx="80"  ry="8"  fill="#c8d4dc" opacity="0.12"/>
-          <ellipse cx="800" cy="468" rx="90"  ry="8"  fill="#c8d4dc" opacity="0.10"/>
-          <rect x="0"   y="285" width="160" height="180" fill="#070605"/>
-          <rect x="740" y="285" width="160" height="180" fill="#070605"/>
-          <rect x="76" y="304" width="36" height="26" rx="1" fill="#0c0904"/>
-          <rect x="78" y="306" width="32" height="22" fill="#1a1005" opacity="0.4"/>
-          <polygon points="155,204 745,204 745,270 155,270" fill="#080706"/>
-          <polygon points="155,204 745,204 750,199 160,199" fill="#0a0908"/>
-          <rect x="155" y="199" width="590" height="7" fill="#0c0a08"/>
-          <rect x="155" y="199" width="590" height="2" fill="#c8d4dc" opacity="0.08"/>
-          <rect x="155" y="266" width="590" height="7" fill="#b8c8d4" opacity="0.35"/>
-          <rect x="155" y="269" width="590" height="4" fill="#d0e0ec" opacity="0.22"/>
-          <rect x="155" y="270" width="590" height="110" fill="#080706"/>
-          <line x1="155" y1="282" x2="745" y2="282" stroke="#0a0806" strokeWidth="1" opacity="0.6"/>
-          <line x1="155" y1="294" x2="745" y2="294" stroke="#0a0806" strokeWidth="1" opacity="0.6"/>
-          <line x1="155" y1="306" x2="745" y2="306" stroke="#0a0806" strokeWidth="1" opacity="0.6"/>
-          <line x1="155" y1="318" x2="745" y2="318" stroke="#0a0806" strokeWidth="1" opacity="0.6"/>
-          <line x1="155" y1="330" x2="745" y2="330" stroke="#0a0806" strokeWidth="1" opacity="0.6"/>
-          <line x1="155" y1="342" x2="745" y2="342" stroke="#0a0806" strokeWidth="1" opacity="0.6"/>
-          <line x1="155" y1="354" x2="745" y2="354" stroke="#0a0806" strokeWidth="1" opacity="0.6"/>
-          <line x1="155" y1="366" x2="745" y2="366" stroke="#0a0806" strokeWidth="1" opacity="0.6"/>
-          <rect x="178" y="282" width="72" height="80" rx="2" fill="#0a0806"/>
-          <rect x="180" y="284" width="68" height="76" fill="#1c1005" opacity="0.6"/>
-          <line x1="214" y1="284" x2="214" y2="360" stroke="#120c04" strokeWidth="1.5"/>
-          <line x1="180" y1="322" x2="248" y2="322" stroke="#120c04" strokeWidth="1.5"/>
-          <rect x="180" y="284" width="68" height="76" fill="#c87808" opacity="0.06"/>
-          <rect x="302" y="282" width="72" height="80" rx="2" fill="#090705"/>
-          <rect x="304" y="284" width="68" height="76" fill="#0c0804"/>
-          <line x1="338" y1="284" x2="338" y2="362" stroke="#100a04" strokeWidth="1.5"/>
-          <line x1="304" y1="323" x2="372" y2="323" stroke="#100a04" strokeWidth="1.5"/>
-          <rect x="426" y="282" width="72" height="80" rx="2" fill="#0a0806"/>
-          <rect x="428" y="284" width="68" height="76" fill="#201205" opacity="0.7"/>
-          <line x1="462" y1="284" x2="462" y2="362" stroke="#120c04" strokeWidth="1.5"/>
-          <line x1="428" y1="323" x2="496" y2="323" stroke="#120c04" strokeWidth="1.5"/>
-          <rect x="428" y="284" width="68" height="76" fill="#c87808" opacity="0.09"/>
-          <ellipse cx="455" cy="308" rx="9" ry="10" fill="#100804" opacity="0.8"/>
-          <rect x="448" y="317" width="18" height="22" rx="3" fill="#100804" opacity="0.7"/>
-          <rect x="550" y="282" width="72" height="80" rx="2" fill="#090705"/>
-          <rect x="552" y="284" width="68" height="76" fill="#0c0804"/>
-          <line x1="586" y1="284" x2="586" y2="362" stroke="#100a04" strokeWidth="1.5"/>
-          <line x1="552" y1="323" x2="620" y2="323" stroke="#100a04" strokeWidth="1.5"/>
-          <rect x="674" y="282" width="72" height="80" rx="2" fill="#0a0806"/>
-          <rect x="676" y="284" width="68" height="76" fill="#1a1004" opacity="0.6"/>
-          <line x1="710" y1="284" x2="710" y2="362" stroke="#120c04" strokeWidth="1.5"/>
-          <line x1="676" y1="323" x2="744" y2="323" stroke="#120c04" strokeWidth="1.5"/>
-          <rect x="676" y="284" width="68" height="76" fill="#c87808" opacity="0.07"/>
-          <rect x="155" y="442" width="590" height="24" fill="#0c0a07"/>
-          <rect x="155" y="442" width="88"  height="24" fill="#0d0b08" stroke="#141008" strokeWidth="1.5"/>
-          <rect x="245" y="442" width="62"  height="24" fill="#0b0907" stroke="#141008" strokeWidth="1.5"/>
-          <rect x="309" y="442" width="96"  height="24" fill="#0e0c09" stroke="#141008" strokeWidth="1.5"/>
-          <rect x="407" y="442" width="72"  height="24" fill="#0c0a07" stroke="#141008" strokeWidth="1.5"/>
-          <rect x="481" y="442" width="84"  height="24" fill="#0e0c09" stroke="#141008" strokeWidth="1.5"/>
-          <rect x="567" y="442" width="68"  height="24" fill="#0b0907" stroke="#141008" strokeWidth="1.5"/>
-          <rect x="637" y="442" width="106" height="24" fill="#0d0b08" stroke="#141008" strokeWidth="1.5"/>
-          <rect x="155" y="454" width="74"  height="12" fill="#0a0807" stroke="#100c06" strokeWidth="1"/>
-          <rect x="231" y="454" width="96"  height="12" fill="#090706" stroke="#100c06" strokeWidth="1"/>
-          <rect x="329" y="454" width="60"  height="12" fill="#0b0908" stroke="#100c06" strokeWidth="1"/>
-          <rect x="391" y="454" width="82"  height="12" fill="#0a0807" stroke="#100c06" strokeWidth="1"/>
-          <rect x="475" y="454" width="54"  height="12" fill="#090706" stroke="#100c06" strokeWidth="1"/>
-          <rect x="531" y="454" width="78"  height="12" fill="#0b0908" stroke="#100c06" strokeWidth="1"/>
-          <rect x="611" y="454" width="132" height="12" fill="#0a0807" stroke="#100c06" strokeWidth="1"/>
-          <path d="M175 449 L178 445 L181 449 L184 445 L187 449" stroke="#9b2a1a" strokeWidth="1.3" fill="none" opacity="0.75"/>
-          <ellipse cx="181" cy="448" rx="8" ry="4" fill="#8b0000" opacity="0.18"/>
-          <line x1="262" y1="444" x2="262" y2="454" stroke="#9b1a1a" strokeWidth="1.2" opacity="0.65"/>
-          <line x1="266" y1="444" x2="266" y2="454" stroke="#9b1a1a" strokeWidth="1.2" opacity="0.65"/>
-          <line x1="260" y1="448" x2="268" y2="448" stroke="#9b1a1a" strokeWidth="1"   opacity="0.65"/>
-          <ellipse cx="264" cy="449" rx="7" ry="4" fill="#8b0000" opacity="0.14"/>
-          <path d="M346 444 L350 450 L354 444 M348 450 L348 455" stroke="#b03020" strokeWidth="1.4" fill="none" opacity="0.75"/>
-          <path d="M343 447 L357 447" stroke="#b03020" strokeWidth="0.9" opacity="0.65"/>
-          <ellipse cx="350" cy="449" rx="9" ry="5" fill="#8b0000" opacity="0.2"/>
-          <path d="M425 445 L425 455 M422 449 L428 449 M422 445 L425 445 M425 455 L428 455" stroke="#9b1a1a" strokeWidth="1.1" fill="none" opacity="0.6"/>
-          <text x="500" y="454" fill="#7b1010" fontSize="7" fontFamily="Georgia,serif" letterSpacing="2" opacity="0.5">ᛗᚨᛚᚷᚱᚨᚦ</text>
-          <path d="M618 445 L622 455 M622 445 L618 455" stroke="#9b1a1a" strokeWidth="1.3" opacity="0.6"/>
-          <ellipse cx="620" cy="450" rx="6" ry="4" fill="#8b0000" opacity="0.14"/>
-          <rect x="155" y="442" width="590" height="26" fill="#8b0000" opacity="0.07"/>
-          <path d="M290 466 L285 483 L292 499 L287 518 L293 538 L289 560" stroke="#070504" strokeWidth="4" fill="none"/>
-          <path d="M290 466 L285 483 L292 499 L287 518 L293 538 L289 560" stroke="#c01818" strokeWidth="1.4" fill="none" opacity="0.85"/>
-          <ellipse cx="289" cy="498" rx="14" ry="45" fill="#8b0000" opacity="0.3"/>
-          <ellipse cx="289" cy="498" rx="7"  ry="28" fill="#c81818" opacity="0.2"/>
-          <path d="M292 492 L312 502 L332 497 L348 507" stroke="#070504" strokeWidth="2" fill="none"/>
-          <path d="M292 492 L312 502 L332 497 L348 507" stroke="#a01010" strokeWidth="0.9" fill="none" opacity="0.65"/>
-          <ellipse cx="320" cy="500" rx="22" ry="8" fill="#8b0000" opacity="0.16"/>
-          <path d="M582 466 L577 480 L583 497 L578 516 L584 533 L579 560" stroke="#070504" strokeWidth="4.5" fill="none"/>
-          <path d="M582 466 L577 480 L583 497 L578 516 L584 533 L579 560" stroke="#c01818" strokeWidth="1.6" fill="none" opacity="0.9"/>
-          <ellipse cx="580" cy="502" rx="16" ry="48" fill="#8b0000" opacity="0.34"/>
-          <ellipse cx="580" cy="502" rx="8"  ry="32" fill="#c81818" opacity="0.22"/>
-          <path d="M579 491 L598 499 L624 492 L645 500" stroke="#070504" strokeWidth="2" fill="none"/>
-          <path d="M579 491 L598 499 L624 492 L645 500" stroke="#a01010" strokeWidth="0.9" fill="none" opacity="0.6"/>
-          <path d="M197 467 L200 485 L196 505 L199 528 L196 552" stroke="#8b1010" strokeWidth="0.9" fill="none" opacity="0.7"/>
-          <ellipse cx="197" cy="500" rx="5" ry="32" fill="#8b0000" opacity="0.16"/>
-          <path d="M452 466 L455 480 L450 494 L453 512 L450 530" stroke="#8b1010" strokeWidth="1.1" fill="none" opacity="0.65"/>
-          <ellipse cx="452" cy="494" rx="6" ry="25" fill="#8b0000" opacity="0.16"/>
-          <ellipse cx="290" cy="466" rx="35" ry="9"  fill="#8b0000" opacity="0.22" style={{animation:"pulse 3s infinite"}}/>
-          <ellipse cx="290" cy="462" rx="20" ry="5"  fill="#9b1010" opacity="0.14"/>
-          <ellipse cx="582" cy="466" rx="38" ry="10" fill="#8b0000" opacity="0.24" style={{animation:"pulse 4s infinite"}}/>
-          <ellipse cx="582" cy="461" rx="22" ry="5"  fill="#9b1010" opacity="0.16"/>
-          <ellipse cx="450" cy="466" rx="25" ry="7"  fill="#8b0000" opacity="0.16"/>
-          <ellipse cx="450" cy="468" rx="260" ry="7" fill="#8b0000" opacity="0.1"/>
-          <circle cx="450" cy="508" r="74" fill="none" stroke="#6b0f0f" strokeWidth="1.4" opacity="0.5"/>
-          <circle cx="450" cy="508" r="63" fill="none" stroke="#560c0c" strokeWidth="0.9" opacity="0.4"/>
-          <line x1="450" y1="434" x2="416" y2="563" stroke="#6b0f0f" strokeWidth="0.8" opacity="0.38"/>
-          <line x1="450" y1="434" x2="514" y2="558" stroke="#6b0f0f" strokeWidth="0.8" opacity="0.38"/>
-          <line x1="386" y1="479" x2="514" y2="479" stroke="#6b0f0f" strokeWidth="0.8" opacity="0.38"/>
-          <line x1="386" y1="479" x2="485" y2="560" stroke="#6b0f0f" strokeWidth="0.8" opacity="0.38"/>
-          <line x1="514" y1="479" x2="415" y2="560" stroke="#6b0f0f" strokeWidth="0.8" opacity="0.38"/>
-          <circle cx="450" cy="508" r="28" fill="none" stroke="#500a0a" strokeWidth="1" opacity="0.35"/>
-          <circle cx="450" cy="508" r="74" fill="#8b0000" opacity="0.1"/>
-          <circle cx="450" cy="508" r="40" fill="#8b0000" opacity="0.1"/>
-          <circle cx="450" cy="508" r="20" fill="#a01010" opacity="0.1"/>
-          <text x="450" y="437" fill="#7b1010" fontSize="9" textAnchor="middle" fontFamily="Georgia,serif" opacity="0.45">ᛗ</text>
-          <text x="513" y="467" fill="#7b1010" fontSize="9" textAnchor="middle" fontFamily="Georgia,serif" opacity="0.38">ᚨ</text>
-          <text x="525" y="524" fill="#7b1010" fontSize="9" textAnchor="middle" fontFamily="Georgia,serif" opacity="0.4">ᛚ</text>
-          <text x="480" y="575" fill="#7b1010" fontSize="9" textAnchor="middle" fontFamily="Georgia,serif" opacity="0.35">ᚷ</text>
-          <text x="420" y="575" fill="#7b1010" fontSize="9" textAnchor="middle" fontFamily="Georgia,serif" opacity="0.35">ᚱ</text>
-          <text x="375" y="524" fill="#7b1010" fontSize="9" textAnchor="middle" fontFamily="Georgia,serif" opacity="0.4">ᚨ</text>
-          <text x="387" y="467" fill="#7b1010" fontSize="9" textAnchor="middle" fontFamily="Georgia,serif" opacity="0.38">ᚦ</text>
-          <rect x="155" y="378" width="590" height="16" fill="#0c0a07" stroke="#141008" strokeWidth="1"/>
-          <rect x="155" y="380" width="590" height="64" fill="#080605"/>
-          <rect x="168" y="380" width="10" height="64" fill="#0e0c08"/>
-          <rect x="286" y="380" width="10" height="64" fill="#0e0c08"/>
-          <rect x="404" y="380" width="10" height="64" fill="#0e0c08"/>
-          <rect x="522" y="380" width="10" height="64" fill="#0e0c08"/>
-          <rect x="640" y="380" width="10" height="64" fill="#0e0c08"/>
-          <rect x="726" y="380" width="10" height="64" fill="#0e0c08"/>
-          <rect x="155" y="373" width="590" height="6" fill="#b8c8d4" opacity="0.3"/>
-          <rect x="175" y="393" width="100" height="50" rx="2" fill="#090705" stroke="#141008" strokeWidth="2"/>
-          <rect x="177" y="395" width="96"  height="46" fill="#120b03" opacity="0.9"/>
-          <line x1="225" y1="395" x2="225" y2="441" stroke="#100a04" strokeWidth="1.5"/>
-          <line x1="177" y1="418" x2="273" y2="418" stroke="#100a04" strokeWidth="1.5"/>
-          <rect x="177" y="395" width="96"  height="46" fill="#c87808" opacity="0.08"/>
-          <ellipse cx="202" cy="408" rx="9" ry="9" fill="#0c0702" opacity="0.9"/>
-          <rect x="195" y="416" width="16" height="18" rx="3" fill="#0c0702" opacity="0.85"/>
-          <rect x="620" y="393" width="100" height="50" rx="2" fill="#090705" stroke="#141008" strokeWidth="2"/>
-          <rect x="622" y="395" width="96"  height="46" fill="#120b03" opacity="0.9"/>
-          <line x1="670" y1="395" x2="670" y2="441" stroke="#100a04" strokeWidth="1.5"/>
-          <line x1="622" y1="418" x2="718" y2="418" stroke="#100a04" strokeWidth="1.5"/>
-          <rect x="622" y="395" width="96"  height="46" fill="#c87808" opacity="0.06"/>
-          <rect x="366" y="390" width="80" height="54" rx="2" fill="#0a0806" stroke="#161008" strokeWidth="2.5"/>
-          <rect x="370" y="394" width="72" height="46" rx="1" fill="#0e0a06"/>
-          <rect x="374" y="398" width="30" height="17" rx="1" fill="#0c0804" stroke="#141008" strokeWidth="1"/>
-          <rect x="408" y="398" width="30" height="17" rx="1" fill="#0c0804" stroke="#141008" strokeWidth="1"/>
-          <rect x="374" y="420" width="30" height="15" rx="1" fill="#0c0804" stroke="#141008" strokeWidth="1"/>
-          <rect x="408" y="420" width="30" height="15" rx="1" fill="#0c0804" stroke="#141008" strokeWidth="1"/>
-          <circle cx="401" cy="413" r="4" fill="#2a1808"/>
-          <circle cx="401" cy="413" r="2.5" fill="#3a2010"/>
-          <rect x="370" y="440" width="72" height="3" fill="#e07808" opacity="0.22"/>
-          <rect x="348" y="400" width="7"  height="34" rx="2" fill="#2a1808"/>
-          <rect x="344" y="396" width="15" height="10" rx="2" fill="#201408"/>
-          <ellipse cx="351" cy="396" rx="8" ry="6"  fill="#b83808" opacity="0.8" style={{animation:"pulse 1.8s infinite"}}/>
-          <ellipse cx="351" cy="393" rx="6" ry="7"  fill="#d06010" opacity="0.75"/>
-          <ellipse cx="351" cy="390" rx="4" ry="6"  fill="#e88018" opacity="0.7" style={{animation:"pulse 0.9s infinite"}}/>
-          <ellipse cx="351" cy="387" rx="2.5" ry="5" fill="#f8c030" opacity="0.65" style={{animation:"pulse 1.1s infinite"}}/>
-          <ellipse cx="351" cy="400" rx="45" ry="40" fill="#c87808" opacity="0.22"/>
-          <ellipse cx="351" cy="420" rx="70" ry="50" fill="#c87808" opacity="0.12"/>
-          <ellipse cx="351" cy="450" rx="90" ry="40" fill="#c87808" opacity="0.07"/>
-          <ellipse cx="340" cy="475" rx="50" ry="18" fill="#c87808" opacity="0.12"/>
-          <rect x="460" y="400" width="7"  height="34" rx="2" fill="#2a1808"/>
-          <rect x="456" y="396" width="15" height="10" rx="2" fill="#201408"/>
-          <ellipse cx="463" cy="396" rx="8" ry="6"  fill="#b83808" opacity="0.8" style={{animation:"pulse 2.1s infinite"}}/>
-          <ellipse cx="463" cy="393" rx="6" ry="7"  fill="#d06010" opacity="0.75"/>
-          <ellipse cx="463" cy="390" rx="4" ry="6"  fill="#e88018" opacity="0.7" style={{animation:"pulse 1.0s infinite"}}/>
-          <ellipse cx="463" cy="387" rx="2.5" ry="5" fill="#f8c030" opacity="0.65" style={{animation:"pulse 1.3s infinite"}}/>
-          <ellipse cx="463" cy="400" rx="45" ry="40" fill="#c87808" opacity="0.22"/>
-          <ellipse cx="463" cy="420" rx="70" ry="50" fill="#c87808" opacity="0.12"/>
-          <ellipse cx="463" cy="450" rx="90" ry="40" fill="#c87808" opacity="0.07"/>
-          <ellipse cx="475" cy="475" rx="50" ry="18" fill="#c87808" opacity="0.12"/>
-          <rect x="340" y="442" width="136" height="26" fill="#c87808" opacity="0.06"/>
-          <line x1="340" y1="252" x2="340" y2="278" stroke="#2a1808" strokeWidth="3"/>
-          <line x1="340" y1="252" x2="430" y2="252" stroke="#2a1808" strokeWidth="3"/>
-          <line x1="430" y1="252" x2="430" y2="278" stroke="#2a1808" strokeWidth="3"/>
-          <rect x="300" y="222" width="260" height="56" rx="3" fill="#130f08" stroke="#4a3010" strokeWidth="1.5"/>
-          <rect x="303" y="225" width="254" height="50" rx="2" fill="#0f0b06"/>
-          <rect x="305" y="227" width="250" height="46" rx="1" fill="none" stroke="#3a2408" strokeWidth="1"/>
-          <text x="430" y="248" fill="#a87828" fontSize="13" textAnchor="middle" fontFamily="Georgia,serif" letterSpacing="3" fontWeight="bold" opacity="0.8">THE TOP TAVERN</text>
-          <text x="430" y="264" fill="#604818" fontSize="9"  textAnchor="middle" fontFamily="Georgia,serif" letterSpacing="4" opacity="0.6">EST. IN DARKNESS</text>
-          <rect x="96" y="342" width="6" height="123" fill="#0e0d0a"/>
-          <path d="M99 342 Q99 312 130 307 L136 307" stroke="#0e0d0a" strokeWidth="5" fill="none"/>
-          <rect x="128" y="297" width="26" height="32" rx="3" fill="#0e0c08" stroke="#1a1810" strokeWidth="1.5"/>
-          <rect x="130" y="299" width="22" height="28" rx="1" fill="#100e08"/>
-          <ellipse cx="141" cy="308" rx="5" ry="4" fill="#c08010" opacity="0.7"/>
-          <ellipse cx="141" cy="306" rx="3" ry="4" fill="#e0a020" opacity="0.6"/>
-          <ellipse cx="141" cy="360" rx="28" ry="22" fill="#c08010" opacity="0.08"/>
-          <ellipse cx="141" cy="420" rx="40" ry="30" fill="#c08010" opacity="0.05"/>
-          <rect x="93" y="462" width="12" height="8" rx="2" fill="#0e0d0a"/>
-          <ellipse cx="640" cy="448" rx="12" ry="11" fill="#080604"/>
-          <rect x="630" y="457" width="22" height="34" rx="5" fill="#090704"/>
-          <rect x="622" y="465" width="10" height="20" rx="4" fill="#090704"/>
-          <path d="M650 465 L658 473" stroke="#090704" strokeWidth="6" strokeLinecap="round"/>
-          <line x1="656" y1="450" x2="660" y2="494" stroke="#0e0c08" strokeWidth="2.5"/>
-          <circle cx="42"  cy="46"  r="1.4" fill="white" opacity="0.45"/>
-          <circle cx="115" cy="30"  r="1.0" fill="white" opacity="0.38"/>
-          <circle cx="188" cy="64"  r="1.8" fill="white" opacity="0.32"/>
-          <circle cx="252" cy="37"  r="1.2" fill="white" opacity="0.42"/>
-          <circle cx="318" cy="57"  r="1.6" fill="white" opacity="0.35"/>
-          <circle cx="456" cy="50"  r="1.4" fill="white" opacity="0.38"/>
-          <circle cx="524" cy="34"  r="2.0" fill="white" opacity="0.30"/>
-          <circle cx="593" cy="62"  r="1.2" fill="white" opacity="0.40"/>
-          <circle cx="724" cy="44"  r="1.0" fill="white" opacity="0.45"/>
-          <circle cx="793" cy="30"  r="1.4" fill="white" opacity="0.38"/>
-          <circle cx="80"  cy="122" r="1.6" fill="white" opacity="0.35"/>
-          <circle cx="148" cy="98"  r="1.2" fill="white" opacity="0.42"/>
-          <circle cx="298" cy="108" r="1.4" fill="white" opacity="0.36"/>
-          <circle cx="519" cy="100" r="2.0" fill="white" opacity="0.25"/>
-          <circle cx="718" cy="94"  r="1.8" fill="white" opacity="0.30"/>
-          <circle cx="57"  cy="198" r="2.0" fill="white" opacity="0.25"/>
-          <circle cx="212" cy="213" r="1.4" fill="white" opacity="0.32"/>
-          <circle cx="358" cy="224" r="1.8" fill="white" opacity="0.27"/>
-          <circle cx="506" cy="178" r="1.0" fill="white" opacity="0.42"/>
-          <circle cx="638" cy="193" r="2.0" fill="white" opacity="0.25"/>
-          <circle cx="768" cy="208" r="1.6" fill="white" opacity="0.32"/>
-          <rect x="178" y="282" width="72"  height="3" fill="#b8c8d4" opacity="0.25"/>
-          <rect x="426" y="282" width="72"  height="3" fill="#b8c8d4" opacity="0.25"/>
-          <rect x="674" y="282" width="72"  height="3" fill="#b8c8d4" opacity="0.25"/>
-          <rect x="177" y="393" width="96"  height="3" fill="#b8c8d4" opacity="0.2"/>
-          <rect x="622" y="393" width="96"  height="3" fill="#b8c8d4" opacity="0.2"/>
-          <rect x="0"   y="0"   width="80"  height="580" fill="#000000" opacity="0.6"/>
-          <rect x="820" y="0"   width="80"  height="580" fill="#000000" opacity="0.6"/>
-          <rect x="0"   y="0"   width="900" height="60"  fill="#000000" opacity="0.65"/>
-          <rect x="0"   y="540" width="900" height="40"  fill="#000000" opacity="0.75"/>
-          <rect x="0"   y="0"   width="900" height="20"  fill="#060a18" opacity="0.5"/>
-        </svg>
-      </div>
+        {/* Background SVG */}
+        <div style={{position:"absolute",inset:0,zIndex:0,overflow:"hidden"}}>
+          <svg viewBox="0 0 900 580" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <rect width="900" height="580" fill="#030408"/>
+            <polygon points="0,290 80,165 180,235 290,145 390,205 490,135 590,195 690,125 790,178 900,155 900,290" fill="#060809"/>
+            <polygon points="0,325 50,278 130,305 210,268 320,308 415,260 515,300 615,255 715,294 810,260 900,280 900,325" fill="#040606"/>
+            <rect x="155" y="204" width="590" height="260" fill="#080706"/>
+            <rect x="155" y="199" width="590" height="7" fill="#0c0a08"/>
+            <rect x="155" y="266" width="590" height="7" fill="#b8c8d4" opacity="0.3"/>
+            <rect x="155" y="378" width="590" height="80" fill="#080605"/>
+            <rect x="366" y="390" width="80" height="52" fill="#0a0806"/>
+            <ellipse cx="351" cy="393" rx="6" ry="7" fill="#d06010" opacity="0.75"/>
+            <ellipse cx="351" cy="395" rx="35" ry="32" fill="#c87808" opacity="0.2"/>
+            <ellipse cx="463" cy="393" rx="6" ry="7" fill="#d06010" opacity="0.75"/>
+            <ellipse cx="463" cy="395" rx="35" ry="32" fill="#c87808" opacity="0.2"/>
+            <rect x="300" y="222" width="300" height="50" fill="#130f08" stroke="#c8982a" stroke-width="1.5"/>
+            <text x="450" y="246" fill="#c8982a" font-size="13" text-anchor="middle" font-family="Georgia,serif" letter-spacing="3" font-weight="bold">THE TOP TAVERN</text>
+            <text x="450" y="262" fill="#604818" font-size="8" text-anchor="middle" font-family="Georgia,serif" letter-spacing="4">EST. IN DARKNESS</text>
+            <rect x="0" y="462" width="900" height="118" fill="#0c0a09"/>
+            <path d="M400 465 L393 495 L400 525 L395 555" stroke="#c01818" stroke-width="1.4" fill="none" opacity="0.8"/>
+            <ellipse cx="397" cy="505" rx="10" ry="40" fill="#8b0000" opacity="0.25"/>
+            <path d="M500 465 L505 490 L498 520 L503 555" stroke="#c01818" stroke-width="1.4" fill="none" opacity="0.8"/>
+            <ellipse cx="502" cy="505" rx="10" ry="40" fill="#8b0000" opacity="0.25"/>
+            <circle cx="450" cy="540" r="60" fill="none" stroke="#6b0f0f" stroke-width="1" opacity="0.4"/>
+            <line x1="450" y1="480" x2="418" y2="590" stroke="#6b0f0f" stroke-width="0.7" opacity="0.35"/>
+            <line x1="450" y1="480" x2="482" y2="590" stroke="#6b0f0f" stroke-width="0.7" opacity="0.35"/>
+            <line x1="390" y1="510" x2="510" y2="510" stroke="#6b0f0f" stroke-width="0.7" opacity="0.35"/>
+            <rect width="900" height="580" fill="#000000" opacity="0.45"/>
+          </svg>
+        </div>
 
-      {/* Foreground UI — animated intro sequence */}
-      {(()=>{
-        const vis = (_phase) => ({
-          opacity: 1,
-          transform: "translateY(0)",
-        });
-        return (
-        <div style={{position:"relative",zIndex:1,textAlign:"center",maxWidth:580,
-          background:"rgba(0,0,0,0.62)",backdropFilter:"blur(2px)",
-          padding:"36px 40px",
-          borderTop:"1px solid rgba(200,152,42,0.18)",
-          borderBottom:"1px solid rgba(200,152,42,0.18)"}}>
+        {/* Foreground card */}
+        <div style={{position:"relative",zIndex:2,textAlign:"center",maxWidth:560,width:"100%",
+          backgroundColor:"rgba(8,7,6,0.85)",
+          border:"1px solid rgba(200,152,42,0.3)",
+          borderTop:"2px solid rgba(200,152,42,0.5)",
+          borderBottom:"2px solid rgba(200,152,42,0.5)",
+          padding:"40px 36px"}}>
 
-          {/* Decorators */}
-          <div style={{color:"#c8982a",fontSize:"16px",letterSpacing:"10px",marginBottom:"16px",opacity: introPhase>=1 ? 0.7:0, transition:"opacity 1s ease-out"}}>— ✦ ✦ ✦ —</div>
+          <div style={{color:"#c8982a",fontSize:"11px",letterSpacing:"8px",fontFamily:"'Cinzel',serif",marginBottom:"16px",opacity:0.7}}>— ✦ ✦ ✦ —</div>
 
-          {/* Title — typewriter via clip-path reveal */}
           <h1 style={{fontFamily:"'Cinzel',serif",fontSize:"clamp(30px,7vw,58px)",fontWeight:900,
             color:"#c8982a",letterSpacing:"5px",lineHeight:1.1,marginBottom:"8px",
-            textShadow:"0 2px 24px rgba(200,152,42,0.4)",
-            ...vis(1)}}>
+            textShadow:"0 0 30px rgba(200,152,42,0.4)"}}>
             THE TOP TAVERN
           </h1>
 
-          {/* Subtitle */}
-          <div style={{fontFamily:"'Cinzel',serif",fontSize:"clamp(11px,2vw,14px)",color:"#7a5828",letterSpacing:"8px",marginBottom:"6px",...vis(2)}}>
+          <div style={{fontFamily:"'Cinzel',serif",fontSize:"clamp(10px,2vw,13px)",color:"#7a5828",letterSpacing:"7px",marginBottom:"6px"}}>
             A SOLO D&amp;D ADVENTURE
           </div>
-          <div style={{color:"#5a3820",fontSize:"11px",letterSpacing:"6px",marginBottom:"24px",...vis(2)}}>
-            EST. IN DARKNESS
-          </div>
+          <div style={{color:"#4a3018",fontSize:"10px",letterSpacing:"5px",fontFamily:"'Cinzel',serif",marginBottom:"24px"}}>EST. IN DARKNESS</div>
 
-          <div style={{width:"50px",height:"1px",background:"#3a2810",margin:"0 auto 22px",opacity: introPhase>=2?1:0,transition:"opacity 1s ease-out"}}/>
+          <div style={{width:"50px",height:"1px",background:"#3a2810",margin:"0 auto 22px"}}/>
 
-          {/* Quote */}
-          <p style={{color:"#c9aa7a",fontSize:"15px",lineHeight:1.95,marginBottom:"14px",fontStyle:"italic",
-            borderLeft:"2px solid #4a2c10",paddingLeft:"18px",textAlign:"left",
-            ...vis(3)}}>
+          <p style={{color:"rgba(201,170,122,0.9)",fontSize:"15px",lineHeight:1.95,marginBottom:"14px",fontStyle:"italic",
+            borderLeft:"2px solid #4a2c10",paddingLeft:"18px",textAlign:"left"}}>
             "The wind howls outside. The blizzard has sealed the mountain road for three days.
             Miners drink in uneasy silence. No one mentions the men who went missing last week.
             Something stirs beneath the town."
           </p>
-          <p style={{color:"#6a5030",fontSize:"13px",lineHeight:1.7,marginBottom:"30px",...vis(3)}}>
+
+          <p style={{color:"#6a5030",fontSize:"14px",lineHeight:1.7,marginBottom:"32px"}}>
             An immersive solo campaign powered by an AI Dungeon Master.
           </p>
 
-          {/* Buttons — only appear after full intro */}
-          <div style={{display:"flex",gap:"14px",justifyContent:"center",flexWrap:"wrap",
-            marginBottom: filledSlots.length ? "24px" : "0",
-            ...vis(4)}}>
+          <div style={{display:"flex",gap:"14px",justifyContent:"center",flexWrap:"wrap"}}>
             <button onClick={()=>setScreen("create")}
-              style={{background:"rgba(0,0,0,0.6)",border:"2px solid #c8982a",color:"#c8982a",fontFamily:"'Cinzel',serif",fontSize:"14px",letterSpacing:"4px",padding:"14px 36px",cursor:"pointer",transition:"all .25s"}}
+              style={{background:"rgba(200,152,42,0.12)",border:"2px solid #c8982a",color:"#c8982a",
+                fontFamily:"'Cinzel',serif",fontSize:"14px",letterSpacing:"4px",padding:"14px 36px",
+                cursor:"pointer",transition:"all .25s"}}
               onMouseEnter={e=>{e.target.style.background="#c8982a";e.target.style.color="#0d0a08";}}
-              onMouseLeave={e=>{e.target.style.background="rgba(0,0,0,0.6)";e.target.style.color="#c8982a";}}>
+              onMouseLeave={e=>{e.target.style.background="rgba(200,152,42,0.12)";e.target.style.color="#c8982a";}}>
               ✦ NEW GAME
             </button>
             {filledSlots.length > 0 && (
               <button onClick={()=>setScreen("load")}
-                style={{background:"rgba(0,0,0,0.6)",border:"2px solid #7a5828",color:"#c9aa7a",fontFamily:"'Cinzel',serif",fontSize:"14px",letterSpacing:"4px",padding:"14px 36px",cursor:"pointer",transition:"all .25s"}}
+                style={{background:"transparent",border:"2px solid #7a5828",color:"#c9aa7a",
+                  fontFamily:"'Cinzel',serif",fontSize:"14px",letterSpacing:"4px",padding:"14px 36px",
+                  cursor:"pointer",transition:"all .25s"}}
                 onMouseEnter={e=>{e.target.style.background="#7a5828";e.target.style.color="#0d0a08";}}
-                onMouseLeave={e=>{e.target.style.background="rgba(0,0,0,0.6)";e.target.style.color="#c9aa7a";}}>
+                onMouseLeave={e=>{e.target.style.background="transparent";e.target.style.color="#c9aa7a";}}>
                 ↩ LOAD GAME
               </button>
             )}
             <button onClick={()=>setShowMap(true)}
-              style={{background:"rgba(0,0,0,0.6)",border:"1px solid #3a2510",color:"#5a4028",fontFamily:"'Cinzel',serif",fontSize:"13px",letterSpacing:"3px",padding:"14px 28px",cursor:"pointer",transition:"all .25s"}}
+              style={{background:"transparent",border:"1px solid #3a2510",color:"#5a4028",
+                fontFamily:"'Cinzel',serif",fontSize:"13px",letterSpacing:"3px",padding:"14px 28px",
+                cursor:"pointer",transition:"all .25s"}}
               onMouseEnter={e=>{e.target.style.borderColor="#c8982a";e.target.style.color="#c8982a";}}
               onMouseLeave={e=>{e.target.style.borderColor="#3a2510";e.target.style.color="#5a4028";}}>
               VIEW MAP
             </button>
           </div>
 
-          {/* Credit */}
-          <div style={{color:"#2a1c0c",fontSize:"10px",letterSpacing:"3px",fontFamily:"'Cinzel',serif",marginTop:"16px",opacity: 0.6}}>
+          <div style={{color:"#2a1c0c",fontSize:"10px",letterSpacing:"3px",fontFamily:"'Cinzel',serif",marginTop:"20px",opacity:0.6}}>
             BUILT WITH CLAUDE · ANTHROPIC
           </div>
         </div>
-        );
-      })()}
-      {showMap && (
-        <div style={{position:"fixed",inset:0,background:"#000000cc",display:"flex",alignItems:"center",justifyContent:"center",zIndex:999,padding:"20px"}} onClick={()=>setShowMap(false)}>
-          <div style={{background:"#0d0905",border:"2px solid #c8982a",padding:"20px",maxWidth:520,width:"100%"}} onClick={e=>e.stopPropagation()}>
-            <div style={{fontFamily:"'Cinzel',serif",color:"#c8982a",fontSize:"14px",letterSpacing:"4px",textAlign:"center",marginBottom:"14px"}}>THE TOP TAVERN — GROUND FLOOR</div>
-            <TavernMap/>
-            <button onClick={()=>setShowMap(false)} style={{display:"block",margin:"14px auto 0",background:"transparent",border:"1px solid #5a3510",color:"#7a5828",fontFamily:"'Cinzel',serif",fontSize:"12px",padding:"8px 24px",cursor:"pointer",letterSpacing:"2px"}}>CLOSE</button>
-          </div>
-        </div>
-      )}
-    </div>
-  );}
-
-  // ── LOAD GAME ───────────────────────────────────────────────────────────────
-  if (screen === "load") return (
-    <div style={{minHeight:"100vh",background:"#0d0a08",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"40px 20px",fontFamily:"'Crimson Text',Georgia,serif"}}>
-      <style>{FONTS}</style>
-      <div style={{maxWidth:560,width:"100%"}}>
-        <button onClick={()=>{setScreen("intro");setIntroPhase(0);}} style={{background:"none",border:"none",color:"#5a3510",cursor:"pointer",fontFamily:"'Cinzel',serif",fontSize:"12px",letterSpacing:"3px",marginBottom:"30px",padding:0}}>
-          ← BACK
-        </button>
-        <h2 style={{fontFamily:"'Cinzel',serif",color:"#c8982a",fontSize:"clamp(20px,4vw,30px)",fontWeight:700,letterSpacing:"4px",marginBottom:"8px",textAlign:"center"}}>
-          LOAD ADVENTURE
-        </h2>
-        <div style={{width:"60px",height:"1px",background:"#5a3510",margin:"0 auto 32px"}}/>
-        <div style={{display:"flex",flexDirection:"column",gap:"12px"}}>
-          {[0,1,2].map(i => {
-            const slot = slots[i];
-            return (
-              <div key={i} style={{background: slot ? "#120e08" : "#0d0a08", border:`1px solid ${slot?"#3a2810":"#1a1408"}`, padding:"20px 24px", display:"flex", alignItems:"center", gap:"20px", opacity: slot ? 1 : 0.4}}>
-                <div style={{fontFamily:"'Cinzel',serif",color:"#5a3510",fontSize:"22px",fontWeight:700,minWidth:28}}>
-                  {i+1}
-                </div>
-                <div style={{flex:1}}>
-                  {slot ? (
-                    <>
-                      <div style={{fontFamily:"'Cinzel',serif",color:"#c8982a",fontSize:"17px",fontWeight:600,marginBottom:"3px"}}>
-                        {CLASSES[slot.charClass]?.emoji} {slot.name}
-                      </div>
-                      <div style={{color:"#7a5828",fontSize:"13px",fontStyle:"italic",marginBottom:"6px"}}>
-                        {slot.charClass} · Level {slot.level} · Day {slot.full?.gameState?.day||1} · {slot.savedAt ? new Date(slot.savedAt).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}) : ""}
-                      </div>
-                      {/* HP bar */}
-                      {slot.full?.gameState && (() => {
-                        const gs = slot.full.gameState;
-                        const hp = gs.hp||0, maxHp = gs.maxHp||1;
-                        const hpPct = Math.round((hp/maxHp)*100);
-                        const hpC = hp/maxHp > 0.6 ? "#4ade80" : hp/maxHp > 0.3 ? "#facc15" : "#ef4444";
-                        return (
-                          <div style={{marginBottom:"6px"}}>
-                            <div style={{display:"flex",justifyContent:"space-between",marginBottom:"3px"}}>
-                              <span style={{color:"#5a3510",fontSize:"10px",fontFamily:"'Cinzel',serif",letterSpacing:"2px"}}>HP</span>
-                              <span style={{color:hpC,fontSize:"11px",fontFamily:"'Cinzel',serif",fontWeight:700}}>{hp}/{maxHp}</span>
-                            </div>
-                            <div style={{background:"#1a1008",height:"4px",borderRadius:"2px",overflow:"hidden"}}>
-                              <div style={{width:`${hpPct}%`,height:"100%",background:hpC,borderRadius:"2px"}}/>
-                            </div>
-                          </div>
-                        );
-                      })()}
-                      {/* Location */}
-                      {slot.full?.location && (
-                        <div style={{color:"#4a3820",fontSize:"11px",fontStyle:"italic",fontFamily:"'Cinzel',serif",letterSpacing:"1px"}}>
-                          📍 {slot.full.location}
-                        </div>
-                      )}
-                    </>
-                  ) : (
-                    <div style={{color:"#3a2810",fontSize:"14px",fontStyle:"italic",fontFamily:"'Cinzel',serif",letterSpacing:"2px"}}>— EMPTY SLOT —</div>
-                  )}
-                </div>
-                <div style={{display:"flex",gap:"8px"}}>
-                  {slot && (
-                    <>
-                      <button onClick={()=>loadSlot(slot)}
-                        style={{background:"transparent",border:"1px solid #c8982a",color:"#c8982a",fontFamily:"'Cinzel',serif",fontSize:"11px",letterSpacing:"3px",padding:"7px 16px",cursor:"pointer",transition:"all .15s"}}
-                        onMouseEnter={e=>{e.target.style.background="#c8982a";e.target.style.color="#0d0a08";}}
-                        onMouseLeave={e=>{e.target.style.background="transparent";e.target.style.color="#c8982a";}}>
-                        LOAD
-                      </button>
-                      <button onClick={()=>{
-                        openConfirm(`Delete Save?`, `Delete "${slot.name}"? This cannot be undone.`, "DELETE", async () => {
-                          try { localStorage.removeItem(`dnd-save-${i}`); } catch(e){}
-                          const updated = [...slots]; updated[i] = null; setSlots(updated);
-                        });
-                      }}
-                        style={{background:"transparent",border:"1px solid #3a1010",color:"#6b2020",fontFamily:"'Cinzel',serif",fontSize:"11px",letterSpacing:"2px",padding:"7px 12px",cursor:"pointer",transition:"all .15s"}}
-                        onMouseEnter={e=>{e.target.style.borderColor="#8b3030";e.target.style.color="#ef4444";}}
-                        onMouseLeave={e=>{e.target.style.borderColor="#3a1010";e.target.style.color="#6b2020";}}>
-                        ✕
-                      </button>
-                    </>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-        <div style={{textAlign:"center",marginTop:"28px"}}>
-          <button onClick={()=>setScreen("create")}
-            style={{background:"transparent",border:"1px solid #3a2810",color:"#7a5828",fontFamily:"'Cinzel',serif",fontSize:"12px",letterSpacing:"3px",padding:"10px 28px",cursor:"pointer"}}
-            onMouseEnter={e=>{e.target.style.borderColor="#c8982a";e.target.style.color="#c8982a";}}
-            onMouseLeave={e=>{e.target.style.borderColor="#3a2810";e.target.style.color="#7a5828";}}>
-            + NEW CHARACTER
-          </button>
-        </div>
       </div>
-    </div>
-  );
-
+    );
+  }
   // ── CHARACTER CREATION ──────────────────────────────────────────────────────
   if (screen === "create") {
     // Class tint colours — each class has its own atmospheric palette
