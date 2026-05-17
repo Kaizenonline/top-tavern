@@ -1,5 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 
+const FONTS = \`@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');\`;
+
+
 const SYSTEM_PROMPT = `You are a seasoned, atmospheric Dungeon Master running a solo D&D 5e campaign set in Ashfen — an isolated mining town gripped by blizzards. The Top Tavern is its warm heart.
 
 KEY LORE:
