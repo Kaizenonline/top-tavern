@@ -1807,7 +1807,7 @@ export default function App() {
   const [quests,       setQuests]      = useState([]);
   const [showQuests,   setShowQuests]  = useState(false);
   const [charBackstory,setCharBackstory]=useState(null);
-  const [introPhase,   setIntroPhase]   = useState(0); // 0=hidden 1=title 2=subtitle 3=quote 4=buttons
+  const [introPhase,   setIntroPhase]   = useState(4); // start fully visible
   const [bestiary,     setBestiary]    = useState({});
   const [npcRep,       setNpcRep]      = useState({ gorn:0, valdris:0, mira:0, holvik:0 });
   const [weather,      setWeather]     = useState(null);
@@ -2813,10 +2813,9 @@ export default function App() {
 
       {/* Foreground UI — animated intro sequence */}
       {(()=>{
-        const vis = (phase) => ({
-          opacity: introPhase >= phase ? 1 : 0,
-          transform: introPhase >= phase ? "translateY(0)" : "translateY(12px)",
-          transition: "opacity .9s ease-out, transform .9s ease-out",
+        const vis = (_phase) => ({
+          opacity: 1,
+          transform: "translateY(0)",
         });
         return (
         <div style={{position:"relative",zIndex:1,textAlign:"center",maxWidth:580,
@@ -2885,7 +2884,7 @@ export default function App() {
           </div>
 
           {/* Credit */}
-          <div style={{color:"#2a1c0c",fontSize:"10px",letterSpacing:"3px",fontFamily:"'Cinzel',serif",marginTop:"16px",opacity: introPhase>=4?0.6:0,transition:"opacity 1.5s ease-out"}}>
+          <div style={{color:"#2a1c0c",fontSize:"10px",letterSpacing:"3px",fontFamily:"'Cinzel',serif",marginTop:"16px",opacity: 0.6}}>
             BUILT WITH CLAUDE · ANTHROPIC
           </div>
         </div>
