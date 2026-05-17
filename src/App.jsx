@@ -4719,8 +4719,7 @@ ${victoryData.name} the ${victoryData.charClass} — Level ${victoryData.level}
 Turns: ${victoryData.turns} · Enemies slain: ${victoryData.enemies}
 
 Key choices:
-${victoryData.decisions.slice(0,3).map(d=>"• "+d).join("
-")}`;
+${victoryData.decisions.slice(0,3).map(d=>"• "+d).join("\\n")}`;
 
         return (
         <div style={{position:"fixed",inset:0,background:"#000000f8",display:"flex",alignItems:"center",justifyContent:"center",zIndex:1000,padding:"20px",overflowY:"auto"}}>
