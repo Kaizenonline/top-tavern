@@ -1103,15 +1103,6 @@ function Portrait({ name, size=160, height=200, border="#c8982a" }) {
       dangerouslySetInnerHTML={{__html: svg}}/>
   );
 }
-function getPortrait(name, w=80, h=80) {
-  if (!name) return null;
-  const n = name.toLowerCase();
-  const key = Object.keys(PORTRAITS).find(k => n.includes(k.toLowerCase()));
-  if (!key) {
-    // Generic enemy portrait
-    const svg = `<svg viewBox="0 0 80 80" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="80" fill="#14100a"/><rect x="0" y="0" width="80" height="80" fill="none" stroke="#8a3020" stroke-width="1.5"/><ellipse cx="40" cy="28" rx="14" ry="14" fill="#6a4030"/><rect x="26" y="40" width="28" height="28" rx="2" fill="#4a3020"/><rect x="16" y="40" width="12" height="22" rx="2" fill="#4a3020"/><rect x="52" y="40" width="12" height="22" rx="2" fill="#4a3020"/><ellipse cx="34" cy="26" rx="3" ry="3.5" fill="#200000"/><ellipse cx="46" cy="26" rx="3" ry="3.5" fill="#200000"/><circle cx="34" cy="26" r="1.5" fill="#c02010" opacity="0.8"/><circle cx="46" cy="26" r="1.5" fill="#c02010" opacity="0.8"/><path d="M33 33 L36 30 L40 34 L44 30 L47 33" stroke="#5a2010" stroke-width="1.5" fill="none"/></svg>`;
-    return svg;
-  }
   return PORTRAITS[key](w, h);
 }
 
