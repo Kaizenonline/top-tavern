@@ -2034,9 +2034,11 @@ export default function App() {
       const res  = await fetch("/api/chat", {
         method:"POST",
         headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1500, system:SYSTEM_PROMPT, messages:msgs })
+        body: JSON.stringify({ model:"claude-sonnet-4-5", max_tokens:1500, system:SYSTEM_PROMPT, messages:msgs })
       });
       const data = await res.json();
+      // Surface any API-level errors
+      if (data.error) throw new Error(`API error: ${data.error.message || JSON.stringify(data.error)}`);
       const raw  = (data.content||[]).map(b => b.text||"").join("");
       let p;
       try { p = JSON.parse(raw.replace(/```(?:json)?\n?|```/g,"").trim()); }
@@ -2250,8 +2252,8 @@ export default function App() {
       });
       setTimeout(() => speakWithActions(p.narrative, p.actions||[]), 200);
     } catch(e) {
-      console.error(e);
-      setLog(prev => [...prev, { type:"error", text:"The connection to the dungeon master flickers in the dark...", id:Date.now() }]);
+      console.error("callDM error:", e);
+      setLog(prev => [...prev, { type:"error", text:`Error: ${e?.message || String(e)}`, id:Date.now() }]);
     }
     setLoading(false);
   }, [speakWithActions, location, blizzard, weather]);
