@@ -1103,6 +1103,26 @@ function Portrait({ name, size=160, height=200, border="#c8982a" }) {
       dangerouslySetInnerHTML={{__html: svg}}/>
   );
 }
+function getPortrait(name, w=80, h=80) {
+  if (!name) return null;
+  const n = name.toLowerCase();
+  const key = Object.keys(PORTRAITS).find(k => n.includes(k.toLowerCase()));
+  if (!key) {
+    // Generic enemy portrait
+    const svg = `<svg viewBox="0 0 80 80" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="80" fill="#14100a"/><rect x="0" y="0" width="80" height="80" fill="none" stroke="#8a3020" stroke-width="1.5"/><ellipse cx="40" cy="28" rx="14" ry="14" fill="#6a4030"/><rect x="26" y="40" width="28" height="28" rx="2" fill="#4a3020"/><rect x="16" y="40" width="12" height="22" rx="2" fill="#4a3020"/><rect x="52" y="40" width="12" height="22" rx="2" fill="#4a3020"/><ellipse cx="34" cy="26" rx="3" ry="3.5" fill="#200000"/><ellipse cx="46" cy="26" rx="3" ry="3.5" fill="#200000"/><circle cx="34" cy="26" r="1.5" fill="#c02010" opacity="0.8"/><circle cx="46" cy="26" r="1.5" fill="#c02010" opacity="0.8"/><path d="M33 33 L36 30 L40 34 L44 30 L47 33" stroke="#5a2010" stroke-width="1.5" fill="none"/></svg>`;
+    return svg;
+  }
+  return PORTRAITS[key](w, h);
+}
+
+function Portrait({ name, size=80, border="#c8982a" }) {
+  const svg = getPortrait(name, size, size);
+  if (!svg) return null;
+  return (
+    <div style={{width:size, height:size, flexShrink:0, border:`2px solid ${border}`, borderRadius:"3px", overflow:"hidden", lineHeight:0}}
+      dangerouslySetInnerHTML={{__html: svg}}/>
+  );
+}
 
 
 function CardGame({ stateRef, miraRef, gameState, miraWon, setMiraWon, setGameState, setLog, setShowCardGame }) {
@@ -1923,9 +1943,9 @@ export default function App() {
     (async () => {
       const loaded = await Promise.all([0,1,2].map(async (i) => {
         try {
-          const r = await window.storage.get(`dnd-save-${i}`);
-          if (r?.value) {
-            const d = JSON.parse(r.value);
+          const _v = localStorage.getItem(`dnd-save-${i}`);
+          if (_v) {
+            const d = JSON.parse(_v);
             if (d.gameState) return { index:i, name:d.gameState.name, charClass:d.gameState.class, level:d.gameState.level, savedAt:d.savedAt, full:d };
           }
         } catch(e) {}
@@ -1938,7 +1958,7 @@ export default function App() {
   const saveGame = async (state, msgs, logEntries, acts, cmb, loc) => {
     const slot = activeSlotRef.current ?? 0;
     try {
-      await window.storage.set(`dnd-save-${slot}`, JSON.stringify({
+      localStorage.setItem(`dnd-save-${slot}`, JSON.stringify({
         gameState: state, messages: msgs, log: logEntries,
         actions: acts, combat: cmb, location: loc,
         party: partyRef.current,
@@ -1963,7 +1983,7 @@ export default function App() {
   const newGame = async () => {
     const slot = activeSlotRef.current;
     if (slot !== null) {
-      try { await window.storage.delete(`dnd-save-${slot}`); } catch(e) {}
+      try { localStorage.removeItem(`dnd-save-${slot}`); } catch(e) {}
     }
     // Reset ALL game state so nothing bleeds into the next run
     setGameState(null); setMessages([]); setLog([]); setActions([]);
@@ -1987,8 +2007,8 @@ export default function App() {
     // Refresh slot summaries
     const loaded = await Promise.all([0,1,2].map(async (i) => {
       try {
-        const r = await window.storage.get(`dnd-save-${i}`);
-        if (r?.value) { const d = JSON.parse(r.value); if (d.gameState) return { index:i, name:d.gameState.name, charClass:d.gameState.class, level:d.gameState.level, savedAt:d.savedAt, full:d }; }
+        const _v = localStorage.getItem(`dnd-save-${i}`);
+        if (_v) { const d = JSON.parse(_v); if (d.gameState) return { index:i, name:d.gameState.name, charClass:d.gameState.class, level:d.gameState.level, savedAt:d.savedAt, full:d }; }
       } catch(e) {}
       return null;
     }));
@@ -2974,7 +2994,7 @@ export default function App() {
                       </button>
                       <button onClick={()=>{
                         openConfirm(`Delete Save?`, `Delete "${slot.name}"? This cannot be undone.`, "DELETE", async () => {
-                          try { await window.storage.delete(`dnd-save-${i}`); } catch(e){}
+                          try { localStorage.removeItem(`dnd-save-${i}`); } catch(e){}
                           const updated = [...slots]; updated[i] = null; setSlots(updated);
                         });
                       }}
@@ -4699,7 +4719,7 @@ ${victoryData.name} the ${victoryData.charClass} — Level ${victoryData.level}
 Turns: ${victoryData.turns} · Enemies slain: ${victoryData.enemies}
 
 Key choices:
-${victoryData.decisions.slice(0,3).map(d=>"• "+d).join("\\n")}`;
+${victoryData.decisions.slice(0,3).map(d=>"• "+d).join("\n")}`;
 
         return (
         <div style={{position:"fixed",inset:0,background:"#000000f8",display:"flex",alignItems:"center",justifyContent:"center",zIndex:1000,padding:"20px",overflowY:"auto"}}>
