@@ -1103,17 +1103,6 @@ function Portrait({ name, size=160, height=200, border="#c8982a" }) {
       dangerouslySetInnerHTML={{__html: svg}}/>
   );
 }
-  return PORTRAITS[key](w, h);
-}
-
-function Portrait({ name, size=80, border="#c8982a" }) {
-  const svg = getPortrait(name, size, size);
-  if (!svg) return null;
-  return (
-    <div style={{width:size, height:size, flexShrink:0, border:`2px solid ${border}`, borderRadius:"3px", overflow:"hidden", lineHeight:0}}
-      dangerouslySetInnerHTML={{__html: svg}}/>
-  );
-}
 
 
 function CardGame({ stateRef, miraRef, gameState, miraWon, setMiraWon, setGameState, setLog, setShowCardGame }) {
