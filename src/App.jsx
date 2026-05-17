@@ -1887,25 +1887,7 @@ export default function App() {
     }
   }, [log]);
 
-  useEffect(() => {
-    const handler = (e) => {
-      if (screen !== "game") return;
-      if (e.key === "Escape") {
-        setShowMap(false); setShowJournal(false); setShowQuests(false);
-        setShowBestiary(false); setShowRecruit(false); setShowShop(false);
-        setShowCardGame(false); setConfirmModal(null); setSidebarOpen(false);
-      }
-      if (!loading && actions.length && ["1","2","3","4"].includes(e.key)) {
-        // Don't fire hotkeys when the user is typing in an input field
-        const tag = e.target.tagName.toLowerCase();
-        if (tag === "input" || tag === "textarea") return;
-        const idx = parseInt(e.key)-1;
-        if (actions[idx]) { doAction(actions[idx]); }
-      }
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [screen, loading, actions, callDM]);
+
 
   // Switch ambient mood on location / combat change
   useEffect(() => {
@@ -2270,6 +2252,26 @@ export default function App() {
     }
     setLoading(false);
   }, [speakWithActions, location, blizzard, weather]);
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (screen !== "game") return;
+      if (e.key === "Escape") {
+        setShowMap(false); setShowJournal(false); setShowQuests(false);
+        setShowBestiary(false); setShowRecruit(false); setShowShop(false);
+        setShowCardGame(false); setConfirmModal(null); setSidebarOpen(false);
+      }
+      if (!loading && actions.length && ["1","2","3","4"].includes(e.key)) {
+        // Don't fire hotkeys when the user is typing in an input field
+        const tag = e.target.tagName.toLowerCase();
+        if (tag === "input" || tag === "textarea") return;
+        const idx = parseInt(e.key)-1;
+        if (actions[idx]) { doAction(actions[idx]); }
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [screen, loading, actions, callDM]);
 
   const doAction = useCallback((action) => {
     if (loading) return;
