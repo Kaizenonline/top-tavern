@@ -2547,105 +2547,121 @@ export default function App() {
   if (screen === "intro") {
     const filledSlots = slots.filter(Boolean);
     return (
-      <div style={{minHeight:"100vh",background:"#080706",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"40px 20px",fontFamily:"Georgia,serif",position:"relative",overflow:"hidden"}}>
-        <style>{FONTS}</style>
+      <div style={{
+        minHeight:"100vh",
+        background:"linear-gradient(180deg,#0a0806 0%,#06050a 60%,#0a0604 100%)",
+        display:"flex",
+        alignItems:"center",
+        justifyContent:"center",
+        padding:"40px 16px",
+        fontFamily:"Georgia,serif"
+      }}>
+        <div style={{
+          width:"100%",
+          maxWidth:"560px",
+          background:"#110d08",
+          border:"2px solid #c8982a",
+          padding:"48px 40px",
+          textAlign:"center"
+        }}>
+          <div style={{color:"#c8982a",fontSize:"11px",letterSpacing:"8px",marginBottom:"20px",fontFamily:"serif"}}>
+            — ✦ ✦ ✦ —
+          </div>
 
-        {/* Background SVG */}
-        <div style={{position:"absolute",inset:0,zIndex:0,overflow:"hidden"}}>
-          <svg viewBox="0 0 900 580" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-            <rect width="900" height="580" fill="#030408"/>
-            <polygon points="0,290 80,165 180,235 290,145 390,205 490,135 590,195 690,125 790,178 900,155 900,290" fill="#060809"/>
-            <polygon points="0,325 50,278 130,305 210,268 320,308 415,260 515,300 615,255 715,294 810,260 900,280 900,325" fill="#040606"/>
-            <rect x="155" y="204" width="590" height="260" fill="#080706"/>
-            <rect x="155" y="199" width="590" height="7" fill="#0c0a08"/>
-            <rect x="155" y="266" width="590" height="7" fill="#b8c8d4" opacity="0.3"/>
-            <rect x="155" y="378" width="590" height="80" fill="#080605"/>
-            <rect x="366" y="390" width="80" height="52" fill="#0a0806"/>
-            <ellipse cx="351" cy="393" rx="6" ry="7" fill="#d06010" opacity="0.75"/>
-            <ellipse cx="351" cy="395" rx="35" ry="32" fill="#c87808" opacity="0.2"/>
-            <ellipse cx="463" cy="393" rx="6" ry="7" fill="#d06010" opacity="0.75"/>
-            <ellipse cx="463" cy="395" rx="35" ry="32" fill="#c87808" opacity="0.2"/>
-            <rect x="300" y="222" width="300" height="50" fill="#130f08" stroke="#c8982a" stroke-width="1.5"/>
-            <text x="450" y="246" fill="#c8982a" font-size="13" text-anchor="middle" font-family="Georgia,serif" letter-spacing="3" font-weight="bold">THE TOP TAVERN</text>
-            <text x="450" y="262" fill="#604818" font-size="8" text-anchor="middle" font-family="Georgia,serif" letter-spacing="4">EST. IN DARKNESS</text>
-            <rect x="0" y="462" width="900" height="118" fill="#0c0a09"/>
-            <path d="M400 465 L393 495 L400 525 L395 555" stroke="#c01818" stroke-width="1.4" fill="none" opacity="0.8"/>
-            <ellipse cx="397" cy="505" rx="10" ry="40" fill="#8b0000" opacity="0.25"/>
-            <path d="M500 465 L505 490 L498 520 L503 555" stroke="#c01818" stroke-width="1.4" fill="none" opacity="0.8"/>
-            <ellipse cx="502" cy="505" rx="10" ry="40" fill="#8b0000" opacity="0.25"/>
-            <circle cx="450" cy="540" r="60" fill="none" stroke="#6b0f0f" stroke-width="1" opacity="0.4"/>
-            <line x1="450" y1="480" x2="418" y2="590" stroke="#6b0f0f" stroke-width="0.7" opacity="0.35"/>
-            <line x1="450" y1="480" x2="482" y2="590" stroke="#6b0f0f" stroke-width="0.7" opacity="0.35"/>
-            <line x1="390" y1="510" x2="510" y2="510" stroke="#6b0f0f" stroke-width="0.7" opacity="0.35"/>
-            <rect width="900" height="580" fill="#000000" opacity="0.45"/>
-          </svg>
-        </div>
-
-        {/* Foreground card */}
-        <div style={{position:"relative",zIndex:2,textAlign:"center",maxWidth:560,width:"100%",
-          backgroundColor:"rgba(8,7,6,0.85)",
-          border:"1px solid rgba(200,152,42,0.3)",
-          borderTop:"2px solid rgba(200,152,42,0.5)",
-          borderBottom:"2px solid rgba(200,152,42,0.5)",
-          padding:"40px 36px"}}>
-
-          <div style={{color:"#c8982a",fontSize:"11px",letterSpacing:"8px",fontFamily:"'Cinzel',serif",marginBottom:"16px",opacity:0.7}}>— ✦ ✦ ✦ —</div>
-
-          <h1 style={{fontFamily:"'Cinzel',serif",fontSize:"clamp(30px,7vw,58px)",fontWeight:900,
-            color:"#c8982a",letterSpacing:"5px",lineHeight:1.1,marginBottom:"8px",
-            textShadow:"0 0 30px rgba(200,152,42,0.4)"}}>
+          <h1 style={{
+            fontSize:"42px",
+            fontWeight:"900",
+            color:"#c8982a",
+            letterSpacing:"6px",
+            lineHeight:"1.1",
+            marginBottom:"10px",
+            fontFamily:"Georgia,serif",
+            textShadow:"0 0 20px rgba(200,152,42,0.5)"
+          }}>
             THE TOP TAVERN
           </h1>
 
-          <div style={{fontFamily:"'Cinzel',serif",fontSize:"clamp(10px,2vw,13px)",color:"#7a5828",letterSpacing:"7px",marginBottom:"6px"}}>
+          <div style={{color:"#7a5828",fontSize:"12px",letterSpacing:"6px",marginBottom:"8px",fontFamily:"Georgia,serif"}}>
             A SOLO D&amp;D ADVENTURE
           </div>
-          <div style={{color:"#4a3018",fontSize:"10px",letterSpacing:"5px",fontFamily:"'Cinzel',serif",marginBottom:"24px"}}>EST. IN DARKNESS</div>
+          <div style={{color:"#4a3018",fontSize:"10px",letterSpacing:"4px",marginBottom:"28px"}}>
+            EST. IN DARKNESS
+          </div>
 
-          <div style={{width:"50px",height:"1px",background:"#3a2810",margin:"0 auto 22px"}}/>
+          <div style={{width:"40px",height:"1px",background:"#c8982a",margin:"0 auto 24px",opacity:"0.5"}}/>
 
-          <p style={{color:"rgba(201,170,122,0.9)",fontSize:"15px",lineHeight:1.95,marginBottom:"14px",fontStyle:"italic",
-            borderLeft:"2px solid #4a2c10",paddingLeft:"18px",textAlign:"left"}}>
+          <p style={{
+            color:"#c9aa7a",
+            fontSize:"15px",
+            lineHeight:"1.9",
+            marginBottom:"14px",
+            fontStyle:"italic",
+            borderLeft:"2px solid #5a3510",
+            paddingLeft:"18px",
+            textAlign:"left"
+          }}>
             "The wind howls outside. The blizzard has sealed the mountain road for three days.
             Miners drink in uneasy silence. No one mentions the men who went missing last week.
             Something stirs beneath the town."
           </p>
 
-          <p style={{color:"#6a5030",fontSize:"14px",lineHeight:1.7,marginBottom:"32px"}}>
-            An immersive solo campaign powered by an AI Dungeon Master.
+          <p style={{color:"#7a6040",fontSize:"14px",lineHeight:"1.7",marginBottom:"36px"}}>
+            An immersive solo D&amp;D campaign powered by an AI Dungeon Master.
           </p>
 
           <div style={{display:"flex",gap:"14px",justifyContent:"center",flexWrap:"wrap"}}>
-            <button onClick={()=>setScreen("create")}
-              style={{background:"rgba(200,152,42,0.12)",border:"2px solid #c8982a",color:"#c8982a",
-                fontFamily:"'Cinzel',serif",fontSize:"14px",letterSpacing:"4px",padding:"14px 36px",
-                cursor:"pointer",transition:"all .25s"}}
+            <button
+              onClick={()=>setScreen("create")}
+              style={{
+                background:"transparent",
+                border:"2px solid #c8982a",
+                color:"#c8982a",
+                fontFamily:"Georgia,serif",
+                fontSize:"14px",
+                letterSpacing:"4px",
+                padding:"14px 36px",
+                cursor:"pointer"
+              }}
               onMouseEnter={e=>{e.target.style.background="#c8982a";e.target.style.color="#0d0a08";}}
-              onMouseLeave={e=>{e.target.style.background="rgba(200,152,42,0.12)";e.target.style.color="#c8982a";}}>
+              onMouseLeave={e=>{e.target.style.background="transparent";e.target.style.color="#c8982a";}}>
               ✦ NEW GAME
             </button>
+
             {filledSlots.length > 0 && (
-              <button onClick={()=>setScreen("load")}
-                style={{background:"transparent",border:"2px solid #7a5828",color:"#c9aa7a",
-                  fontFamily:"'Cinzel',serif",fontSize:"14px",letterSpacing:"4px",padding:"14px 36px",
-                  cursor:"pointer",transition:"all .25s"}}
+              <button
+                onClick={()=>setScreen("load")}
+                style={{
+                  background:"transparent",
+                  border:"2px solid #7a5828",
+                  color:"#c9aa7a",
+                  fontFamily:"Georgia,serif",
+                  fontSize:"14px",
+                  letterSpacing:"4px",
+                  padding:"14px 36px",
+                  cursor:"pointer"
+                }}
                 onMouseEnter={e=>{e.target.style.background="#7a5828";e.target.style.color="#0d0a08";}}
                 onMouseLeave={e=>{e.target.style.background="transparent";e.target.style.color="#c9aa7a";}}>
                 ↩ LOAD GAME
               </button>
             )}
-            <button onClick={()=>setShowMap(true)}
-              style={{background:"transparent",border:"1px solid #3a2510",color:"#5a4028",
-                fontFamily:"'Cinzel',serif",fontSize:"13px",letterSpacing:"3px",padding:"14px 28px",
-                cursor:"pointer",transition:"all .25s"}}
+
+            <button
+              onClick={()=>setShowMap(true)}
+              style={{
+                background:"transparent",
+                border:"1px solid #3a2510",
+                color:"#5a4028",
+                fontFamily:"Georgia,serif",
+                fontSize:"13px",
+                letterSpacing:"3px",
+                padding:"14px 28px",
+                cursor:"pointer"
+              }}
               onMouseEnter={e=>{e.target.style.borderColor="#c8982a";e.target.style.color="#c8982a";}}
               onMouseLeave={e=>{e.target.style.borderColor="#3a2510";e.target.style.color="#5a4028";}}>
               VIEW MAP
             </button>
-          </div>
-
-          <div style={{color:"#2a1c0c",fontSize:"10px",letterSpacing:"3px",fontFamily:"'Cinzel',serif",marginTop:"20px",opacity:0.6}}>
-            BUILT WITH CLAUDE · ANTHROPIC
           </div>
         </div>
       </div>
